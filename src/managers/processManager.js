@@ -26,6 +26,11 @@ const ProcessManager = (function () {
     '835432', 'B02E26', 'F9801D', 'FED83D',
     '80C71F', '5E7C16', '169C9C', '3AB3DA',
     '3C44AA', '8932B8', 'C74EBD', 'F38BAA'];
+  const dyesNames = [
+    'White', 'Light Gray', 'Gray', 'Black',
+    'Brown', 'Red', 'Orange', 'Yellow',
+    'Lime', 'Green', 'Cyan', 'Light Blue',
+    'Blue', 'Purple', 'Magenta', 'Pink'];
 
   let dyesRGB = new Array(dyesHex.length);
 
@@ -34,6 +39,7 @@ const ProcessManager = (function () {
   }
 
   let chosenColours = [];
+  let chosenColoursIndex = [];
   let amount = 5;
 
   function DrawColor(lab, size = 25, text = '') {
@@ -69,6 +75,7 @@ const ProcessManager = (function () {
           targetLab = OkLab.sRGBtoOKLab(sRGB.P5ColTosRGB(DOMManager.targetColorPicker.color()));
 
           chosenColours.length = 0;
+          chosenColoursIndex.length = 0;
 
           this.changeState('generate');
           break;
@@ -78,6 +85,7 @@ const ProcessManager = (function () {
             console.log('Target Colour: ', targetLab.P5Color);
 
             let nextColour = dyesRGB[0].copy();
+            let nextIndex = 0;
             let dist = OkLab.Dist(OkLab.sRGBtoOKLab(nextColour), targetLab);
 
             for (let i = 1; i < dyesRGB.length; i++) {
@@ -90,11 +98,12 @@ const ProcessManager = (function () {
               if (currDist < dist) {
                 nextColour = dyesRGB[i].copy();
                 dist = currDist;
+                nextIndex = i;
               }
             }
 
             chosenColours.push(nextColour.copy());
-
+            chosenColoursIndex.push(nextIndex);
           } else {
             // do nothing for now
             let averagedCol = chosenColours[0].copy();
@@ -105,6 +114,7 @@ const ProcessManager = (function () {
             }
 
             let nextColour = dyesRGB[0].copy();
+            let nextIndex = 0;
             let nextDist = OkLab.Dist(OkLab.sRGBtoOKLab(sRGB.average(nextColour, averagedCol)), targetLab);
 
             for (let i = 1; i < dyesRGB.length; i++) {
@@ -115,14 +125,17 @@ const ProcessManager = (function () {
               if (currDist < nextDist) {
                 nextColour = dyesRGB[i].copy();
                 nextDist = currDist;
+                nextIndex = i;
               }
             }
 
             chosenColours.push(nextColour.copy());
+            chosenColoursIndex.push(nextIndex);
 
             if (chosenColours.length === amount) {
               this.changeState('nothing');
               console.log(chosenColours);
+              console.log(chosenColoursIndex);
             }
           }
 
@@ -132,18 +145,28 @@ const ProcessManager = (function () {
           break;
       }
 
-      // draw dyes
+      // draw sequence
+      const textSize_ = 15;
+      const circleSize = 25;
       for (let i = 0; i < chosenColours.length; i++) {
-        // let lab = OkLab.sRGBtoOKLab(chosenColours[i]);
-        // DrawColor(lab);
+        let x = 10 + (i * (circleSize + 10));
+        let y = 10;
 
-        const x = 10 + (i * (25 + 10));
-        const y = 10;
-
+        // draw colours
         ellipseMode(CORNER);
         fill(chosenColours[i].P5Color);
         stroke(strokeCol.P5Color);
-        circle(x, y, 25);
+        circle(x, y, circleSize);
+
+        // draw text
+        x = 10;
+        y = 10 + circleSize + 10 + (i * (textSize_ + 10));
+
+        textAlign(LEFT, TOP);
+        noStroke();
+        fill(strokeCol.P5Color);
+        textSize(textSize_);
+        text(dyesNames[chosenColoursIndex[i]], x, y);
       }
 
       DrawColor(targetLab);
