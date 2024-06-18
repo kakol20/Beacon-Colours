@@ -79,13 +79,13 @@ const ProcessManager = (function () {
 
           amount = DOMManager.amountInput.value() * 1;
 
+          console.log('Target Colour: ', (OkLab.OkLabtosRGB(targetLab)).CSSColor);
+
           this.changeState('generate');
           break;
         case 'generate':
           // add chosen colours;
           if (chosenColours.length === 0) {
-            console.log('Target Colour: ', targetLab.P5Color);
-
             let nextColour = dyesRGB[0].copy();
             let nextIndex = 0;
             let dist = OkLab.Dist(OkLab.sRGBtoOKLab(nextColour), targetLab);
@@ -107,10 +107,9 @@ const ProcessManager = (function () {
             chosenColours.push(nextColour.copy());
             chosenColoursIndex.push(nextIndex);
           } else {
-            // do nothing for now
-            let averagedCol = chosenColours[0].copy();
 
             // get output colour of chosen colours
+            let averagedCol = chosenColours[0].copy();
             for (let i = 1; i < chosenColours.length; i++) {
               averagedCol = sRGB.average(averagedCol, chosenColours[i]);
             }
@@ -134,7 +133,7 @@ const ProcessManager = (function () {
             chosenColours.push(nextColour.copy());
             chosenColoursIndex.push(nextIndex);
 
-            if (chosenColours.length === amount) {
+            if (chosenColours.length >= amount) {
               this.changeState('nothing');
               console.log(chosenColours);
               console.log(chosenColoursIndex);
@@ -147,18 +146,22 @@ const ProcessManager = (function () {
           break;
       }
 
-      // draw sequence
+      // ----- DRAW SEQUENCE ------
       const textSize_ = 15;
       const circleSize = 25;
       for (let i = 0; i < chosenColours.length; i++) {
         let x = 10 + (i * (circleSize + 10));
         let y = 10;
 
-        // draw colours
+        // draw colours sequence
         ellipseMode(CORNER);
         fill(chosenColours[i].P5Color);
         stroke(strokeCol.P5Color);
         circle(x, y, circleSize);
+
+        // draw colour's position
+        // let lab = OkLab.sRGBtoOKLab(chosenColours[i]);
+        // DrawColor(lab, 5);
 
         // draw text
         x = 10;
@@ -169,6 +172,19 @@ const ProcessManager = (function () {
         fill(strokeCol.P5Color);
         textSize(textSize_);
         text(dyesNames[chosenColoursIndex[i]], x, y);
+      }
+
+      // ----- DRAW AVERAGED COLOURS -----
+      let averageCol = 0;
+      for (let i = 0; i < chosenColours.length; i++) {
+        if (i == 0) {
+          averageCol = chosenColours[i].copy();
+        } else {
+          averageCol = sRGB.average(averageCol, chosenColours[i]);
+        }
+
+        let averageLab = OkLab.sRGBtoOKLab(averageCol);
+        DrawColor(averageLab, i === chosenColours.length - 1 ? 20 : 10);
       }
 
       DrawColor(targetLab);

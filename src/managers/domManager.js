@@ -18,7 +18,7 @@ const DOMManager = (function () {
       startX = windowWidth > width ? width + 10 : 10;
       startY = windowWidth > width ? 10 : height + 10;
 
-      this.targetColorPicker = createColorPicker('hotpink');
+      this.targetColorPicker = createColorPicker('burlywood');
       this.targetColorPicker.position(startX, startY);
       this.targetColorPicker.size(50, 50);
 
@@ -27,7 +27,7 @@ const DOMManager = (function () {
       this.amountSpan = createSpan('Amount');
       this.amountSpan.position(startX, startY);
 
-      this.amountInput = createInput(4);
+      this.amountInput = createInput(5);
       this.amountInput.position(startX + this.amountSpan.width + 25, startY);
       this.amountInput.input(() => {
         console.log('Amount Changed', this.amountInput.value());
