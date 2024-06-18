@@ -77,6 +77,8 @@ const ProcessManager = (function () {
           chosenColours.length = 0;
           chosenColoursIndex.length = 0;
 
+          amount = DOMManager.amountInput.value() * 1;
+
           this.changeState('generate');
           break;
         case 'generate':
