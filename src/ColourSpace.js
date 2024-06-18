@@ -54,8 +54,8 @@ class sRGB {
     return color(this.r * 255, this.g * 255, this.b * 255);
   }
 
-  static HexTosRGB(hex) {
-    const hexStr = hex.substring(1);
+  static HexTosRGB(hex, hasHash = true) {
+    const hexStr = hasHash ? hex.substring(1) : hex;
     const hexInt = Number('0x' + hexStr);
 
     const rMask = 0xFF0000;
@@ -183,6 +183,18 @@ class OkLab {
     b1 = b2 <= 0.00313058 ? 12.92 * b2 : (MathCustom.NRoot(b2, 2.4) * 1.055) - 0.055;
 
     return new sRGB(r1, g1, b1);
+  }
+
+  static SqrDist(lab1, lab2) {
+    let l = lab1.l - lab2.l;
+    let a = lab1.a - lab2.b;
+    let b = lab1.a - lab2.b;
+
+    l *= l;
+    a *= a;
+    b *= b;
+
+    return l + a + b;
   }
 }
 
