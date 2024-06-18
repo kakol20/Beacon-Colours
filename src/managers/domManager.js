@@ -15,7 +15,7 @@ const DOMManager = (function () {
       startX = windowWidth > width ? width + 10 : 10;
       startY = windowWidth > width ? 10 : height + 10;
 
-      this.targetColorPicker = createColorPicker('blue');
+      this.targetColorPicker = createColorPicker('magenta');
       this.targetColorPicker.position(startX, startY);
       this.targetColorPicker.size(50, 50);
 

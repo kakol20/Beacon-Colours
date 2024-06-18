@@ -17,6 +17,8 @@ const ProcessManager = (function () {
 
   const strokeCol = new OkLab(bgCol.l > 0.5 ? 0 : 1, 0, 0);
 
+  const padding = 25;
+
   // let start = false;
 
   const dyesHex = [
@@ -34,15 +36,15 @@ const ProcessManager = (function () {
   // temporary
   function DrawDyes() {
     for (let i = 0; i < dyesOkLab.length; i++) {
-      DrawColor(dyesOkLab[i]);
+      DrawColor(dyesOkLab[i], 10);
     }
   }
 
   function DrawColor(lab, size = 25, text = '') {
     // let rgb = OkLab.OkLabtosRGB(lab);
 
-    const x = map(lab.a, ab.min, ab.max, size, width - size);
-    const y = map(lab.b, ab.min, ab.max, size, height - size);
+    const x = map(lab.a, ab.min, ab.max, padding, width - padding);
+    const y = map(lab.b, ab.min, ab.max, padding, height - padding);
 
     ellipseMode(CENTER);
     fill(lab.P5Color);
