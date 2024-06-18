@@ -134,8 +134,16 @@ const ProcessManager = (function () {
 
       // draw dyes
       for (let i = 0; i < chosenColours.length; i++) {
-        let lab = OkLab.sRGBtoOKLab(chosenColours[i]);
-        DrawColor(lab);
+        // let lab = OkLab.sRGBtoOKLab(chosenColours[i]);
+        // DrawColor(lab);
+
+        const x = 10 + (i * (25 + 10));
+        const y = 10;
+
+        ellipseMode(CORNER);
+        fill(chosenColours[i].P5Color);
+        stroke(strokeCol.P5Color);
+        circle(x, y, 25);
       }
 
       DrawColor(targetLab);
