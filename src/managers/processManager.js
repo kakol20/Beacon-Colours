@@ -41,6 +41,8 @@ const ProcessManager = (function () {
   let chosenColours = [];
   let chosenColoursIndex = [];
   let amount = 5;
+  let lastDist = 0;
+  let finish = false;
 
   function DrawColor(lab, size = 25, text = '') {
     // let rgb = OkLab.OkLabtosRGB(lab);
@@ -76,6 +78,8 @@ const ProcessManager = (function () {
 
           chosenColours.length = 0;
           chosenColoursIndex.length = 0;
+          lastDist = 0;
+          finish = false;
 
           amount = DOMManager.amountInput.value() * 1;
 
@@ -104,6 +108,8 @@ const ProcessManager = (function () {
               }
             }
 
+            lastDist = dist;
+
             chosenColours.push(nextColour.copy());
             chosenColoursIndex.push(nextIndex);
           } else {
@@ -130,10 +136,16 @@ const ProcessManager = (function () {
               }
             }
 
-            chosenColours.push(nextColour.copy());
-            chosenColoursIndex.push(nextIndex);
+            if (nextDist <= lastDist) {
+              chosenColours.push(nextColour.copy());
+              chosenColoursIndex.push(nextIndex);
 
-            if (chosenColours.length >= amount) {
+              lastDist = nextDist;
+            } else {
+              finish = true;
+            }
+
+            if (chosenColours.length >= amount || finish) {
               this.changeState('nothing');
               console.log(chosenColours);
               console.log(chosenColoursIndex);
