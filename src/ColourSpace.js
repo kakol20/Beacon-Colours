@@ -19,7 +19,7 @@ class sRGB {
     return new sRGB(this.r, this.g, this.b);
   }
 
-  mult(s) {
+  scalar(s) {
     this.r *= s;
     this.g *= s;
     this.b *= s;
@@ -35,10 +35,17 @@ class sRGB {
     this.b -= other.b;
   }
 
+  static average(rgb1, rgb2) {
+    let out = rgb1.copy();
+    out.add(rgb2);
+    out.scalar(1 / 2);
+    return out.copy();
+  }
+
   static mix(rgb1, rgb2, t) {
     let out = rgb2.copy();
     out.sub(rgb1);
-    out.mult(t);
+    out.scalar(t);
     out.add(rgb1);
     return out.copy();
   }
@@ -187,14 +194,20 @@ class OkLab {
 
   static SqrDist(lab1, lab2) {
     let l = lab1.l - lab2.l;
-    let a = lab1.a - lab2.b;
-    let b = lab1.a - lab2.b;
+    let a = lab1.a - lab2.a;
+    let b = lab1.b - lab2.b;
 
-    l *= l;
-    a *= a;
-    b *= b;
+    // console.log(lab1.l, lab2.l);
+
+    l = l * l;
+    a = a * a;
+    b = b * b;
 
     return l + a + b;
+  }
+
+  static Dist(lab1, lab2) {
+    return Math.sqrt(OkLab.SqrDist(lab1, lab2));
   }
 }
 

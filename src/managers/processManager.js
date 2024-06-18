@@ -25,20 +25,16 @@ const ProcessManager = (function () {
     'F9FFFE', '9D9D97', '474F52', '1D1D21',
     '835432', 'B02E26', 'F9801D', 'FED83D',
     '80C71F', '5E7C16', '169C9C', '3AB3DA',
-    '3C44AA', '8932B8', 'C74EBD', 'F38BAA' ];
+    '3C44AA', '8932B8', 'C74EBD', 'F38BAA'];
 
-  let dyesOkLab = new Array(dyesHex.length)
+  let dyesRGB = new Array(dyesHex.length);
 
   for (let i = 0; i < dyesHex.length; i++) {
-    dyesOkLab[i] = OkLab.sRGBtoOKLab(sRGB.HexTosRGB(dyesHex[i], false));
+    dyesRGB[i] = sRGB.HexTosRGB(dyesHex[i], false);
   }
 
-  // temporary
-  function DrawDyes() {
-    for (let i = 0; i < dyesOkLab.length; i++) {
-      DrawColor(dyesOkLab[i], 10);
-    }
-  }
+  let chosenColours = [];
+  let amount = 5;
 
   function DrawColor(lab, size = 25, text = '') {
     // let rgb = OkLab.OkLabtosRGB(lab);
@@ -72,20 +68,52 @@ const ProcessManager = (function () {
         case 'setTarget':
           targetCol = OkLab.sRGBtoOKLab(sRGB.P5ColTosRGB(DOMManager.targetColorPicker.color()));
 
-          // start = true;
+          chosenColours.length = 0;
 
           this.changeState('generate');
           break;
         case 'generate':
+          // add chosen colours;
+          if (chosenColours.length === 0) {
+            console.log('Target Colour: ', targetCol.P5Color);
 
-          this.changeState('nothing');
+            let nextColour = dyesRGB[0].copy();
+            let dist = OkLab.Dist(OkLab.sRGBtoOKLab(nextColour), targetCol.copy());
+
+            for (let i = 1; i < dyesRGB.length; i++) {
+              // console.log(dyesRGB[i]);
+              let currLab = OkLab.sRGBtoOKLab(dyesRGB[i]);
+              let currDist = OkLab.Dist(targetCol.copy(), currLab.copy());
+
+              // console.log(dyesRGB[i].CSSColor, currDist);
+
+              if (currDist < dist) {
+                nextColour = dyesRGB[i].copy();
+                dist = currDist;
+              }
+            }
+
+            chosenColours.push(nextColour.copy());
+
+          } else {
+            // do nothing for now
+
+            this.changeState('nothing');
+            console.log(chosenColours);
+          }
+
           break;
         default:
           // do nothing
           break;
       }
 
-      DrawDyes();
+      // draw dyes
+      for (let i = 0; i < chosenColours.length; i++) {
+        let lab = OkLab.sRGBtoOKLab(chosenColours[i]);
+        DrawColor(lab, 10);
+      }
+
       DrawColor(targetCol);
     }
   }
