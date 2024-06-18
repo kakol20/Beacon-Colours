@@ -7,7 +7,7 @@ const MainManager = (function () {
     },
 
     setup() {
-      pixelDensity(1);
+      // pixelDensity(1);
 
       const size = Math.min(windowWidth, windowHeight, 800);
 
