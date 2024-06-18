@@ -10,7 +10,7 @@ const ProcessManager = (function () {
 
   const debugStates = true;
 
-  let targetCol = OkLab.sRGBtoOKLab(new sRGB(255 / 255, 0, 135 / 255));
+  let targetLab = OkLab.sRGBtoOKLab(new sRGB(255 / 255, 0, 135 / 255));
 
   let bgCol = OkLab.sRGBtoOKLab(new sRGB(28 / 255, 28 / 255, 28 / 255));
   bgCol.l *= 1.5;
@@ -66,7 +66,7 @@ const ProcessManager = (function () {
 
       switch (state) {
         case 'setTarget':
-          targetCol = OkLab.sRGBtoOKLab(sRGB.P5ColTosRGB(DOMManager.targetColorPicker.color()));
+          targetLab = OkLab.sRGBtoOKLab(sRGB.P5ColTosRGB(DOMManager.targetColorPicker.color()));
 
           chosenColours.length = 0;
 
@@ -75,15 +75,15 @@ const ProcessManager = (function () {
         case 'generate':
           // add chosen colours;
           if (chosenColours.length === 0) {
-            console.log('Target Colour: ', targetCol.P5Color);
+            console.log('Target Colour: ', targetLab.P5Color);
 
             let nextColour = dyesRGB[0].copy();
-            let dist = OkLab.Dist(OkLab.sRGBtoOKLab(nextColour), targetCol.copy());
+            let dist = OkLab.Dist(OkLab.sRGBtoOKLab(nextColour), targetLab);
 
             for (let i = 1; i < dyesRGB.length; i++) {
               // console.log(dyesRGB[i]);
               let currLab = OkLab.sRGBtoOKLab(dyesRGB[i]);
-              let currDist = OkLab.Dist(targetCol.copy(), currLab.copy());
+              let currDist = OkLab.Dist(targetLab, currLab);
 
               // console.log(dyesRGB[i].CSSColor, currDist);
 
@@ -97,9 +97,33 @@ const ProcessManager = (function () {
 
           } else {
             // do nothing for now
+            let averagedCol = chosenColours[0].copy();
 
-            this.changeState('nothing');
-            console.log(chosenColours);
+            // get output colour of chosen colours
+            for (let i = 1; i < chosenColours.length; i++) {
+              averagedCol = sRGB.average(averagedCol, chosenColours[i]);
+            }
+
+            let nextColour = dyesRGB[0].copy();
+            let nextDist = OkLab.Dist(OkLab.sRGBtoOKLab(sRGB.average(nextColour, averagedCol)), targetLab);
+
+            for (let i = 1; i < dyesRGB.length; i++) {
+              let currAverage = sRGB.average(averagedCol, dyesRGB[i]);
+              let currLab = OkLab.sRGBtoOKLab(currAverage);
+              let currDist = OkLab.Dist(currLab, targetLab);
+
+              if (currDist < nextDist) {
+                nextColour = dyesRGB[i].copy();
+                nextDist = currDist;
+              }
+            }
+
+            chosenColours.push(nextColour.copy());
+
+            if (chosenColours.length === amount) {
+              this.changeState('nothing');
+              console.log(chosenColours);
+            }
           }
 
           break;
@@ -111,10 +135,10 @@ const ProcessManager = (function () {
       // draw dyes
       for (let i = 0; i < chosenColours.length; i++) {
         let lab = OkLab.sRGBtoOKLab(chosenColours[i]);
-        DrawColor(lab, 10);
+        DrawColor(lab);
       }
 
-      DrawColor(targetCol);
+      DrawColor(targetLab);
     }
   }
 })()
