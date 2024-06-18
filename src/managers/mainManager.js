@@ -9,9 +9,12 @@ const MainManager = (function () {
     setup() {
       pixelDensity(1);
 
-      this.canvas = createCanvas(windowWidth, windowHeight);
+      const size = Math.min(windowWidth, windowHeight, 800);
+
+      this.canvas = createCanvas(size, size);
       this.canvas.position(0, 0);
 
+      DOMManager.setup();
       ProcessManager.setup();
     },
 
