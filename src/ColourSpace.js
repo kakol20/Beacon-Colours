@@ -233,7 +233,7 @@ class HSLLab {
   }
 
   static Dist(lab1, lab2) {
-    return Math.sqrt(OkLab.SqrDist(lab1, lab2));
+    return Math.sqrt(HSLLab.SqrDist(lab1, lab2));
   }
 }
 
