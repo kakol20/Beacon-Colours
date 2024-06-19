@@ -85,6 +85,158 @@ class sRGB {
   }
 }
 
+class HSL {
+  constructor(h = 0, s = 0, l = 0) {
+    this.h = h;
+    this.s = s;
+    this.l = l;
+  }
+
+  static RGBtoHSL(rgb) {
+    const Cmax = Math.max(rgb.r, rgb.g, rgb.b);
+    const Cmin = Math.min(rgb.r, rgb.g, rgb.b);
+    const delta = Cmax - Cmin;
+
+    const l = (Cmax + Cmin) / 2;
+    const s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+
+    let h = 0;
+
+    if (delta === 0 ) {
+      h = 0;
+    } else if (Cmax === rgb.r) {
+      h = 60 * MathCustom.UnsignedMod((rgb.g - rgb.b) / delta, 6);
+    } else if (Cmax === rgb.g) {
+      h = 60 * (((rgb.b - rgb.r) / delta) + 2);
+    } else if (Cmax === rgb.b) {
+      h = 60 * (((rgb.r - rgb.g) / delta) + 4);
+    }
+    h *= MathCustom.DegToRad;
+
+    return new HSL(h, s, l);
+  }
+
+  static HSLtoRGB(hsl) {
+    const h_deg = hsl.h * MathCustom.RadToDeg;
+
+    const C = (1 - Math.abs(2 * hsl.l - 1)) * hsl.s;
+    const X = C * (1 - Math.abs(MathCustom.UnsignedMod(h_deg / 60, 2) - 1));
+    const m = hsl.l - (C / 2);
+
+    let rgb = [];
+
+    if (h_deg < 60) {
+      rgb = [C, X, 0];
+    } else if (h_deg < 120) {
+      rgb = [X, C, 0];
+    } else if (h_deg < 180) {
+      rgb = [0, C, X];
+    } else if (h_deg < 240) {
+      rgb = [0, X, C];
+    } else if (h_deg < 300) {
+      rgb = [X, 0, C];
+    } else {
+      rgb = [C, 0, X];
+    }
+
+    return new sRGB(rgb[0] + m, rgb[1] + m, rgb[2] + m);
+  }
+
+  copy() {
+    return new HSL(this.h, this.s, this.l);
+  }
+
+  fallback() {
+    this.h = MathCustom.UnsignedMod(this.h, MathCustom.TAU);
+    this.s = Math.min(Math.max(this.s, 0), 1);
+    this.l = Math.min(Math.max(this.l, 0), 1);
+  }
+}
+
+class HSLLab {
+  constructor(l = 0, a = 0, b = 0) {
+    this.l = l;
+    this.a = a;
+    this.b = b;
+  }
+
+  static HSLtoHSLLab(hsl) {
+    const l = hsl.l;
+    const a = hsl.s * Math.cos(hsl.h);
+    const b = hsl.s * Math.sin(hsl.h);
+
+    return new HSLLab(l, a, b);
+  }
+
+  static HSLLabtoHSL(lab) {
+    const l = lab.l;
+    const s = Math.sqrt(lab.a * lab.a + lab.b * lab.b);
+    const h = MathCustom.UnsignedMod(Math.atan2(lab.b, lab.a), MathCustom.TAU);
+
+    return new HSL(h, s, l);
+  }
+
+  static RGBtoHSLLab(rgb) {
+    let hsl = HSL.RGBtoHSL(rgb);
+
+    // console.log(hsl);
+    return HSLLab.HSLtoHSLLab(hsl);
+  }
+
+  static HSLLabtoRGB(lab) {
+    let hsl = HSLLab.HSLLabtoHSL(lab);
+    return HSL.HSLtoRGB(hsl);
+  }
+
+  copy() {
+    return new HSLLab(this.l, this.a, this.b);
+  }
+
+  scalar(s) {
+    this.l *= s;
+    this.a *= s;
+    this.b *= s;
+  }
+
+  add(otherLab) {
+    this.l += otherLab.l;
+    this.a += otherLab.a;
+    this.b += otherLab.b;
+  }
+
+  sub(otherLab) {
+    this.l -= otherLab.l;
+    this.a -= otherLab.a;
+    this.b -= otherLab.b;
+  }
+
+  get P5Color() {
+    let hsl = HSLLab.HSLLabtoHSL(this);
+    hsl.fallback();
+
+    const srgb = HSLLab.HSLLabtoRGB(hsl);
+    return srgb.P5Color;
+  }
+
+  static SqrDist(lab1, lab2) {
+    let l = lab1.l - lab2.l;
+    let a = lab1.a - lab2.a;
+    let b = lab1.b - lab2.b;
+
+    // console.log(lab1.l, lab2.l);
+
+    l = l * l;
+    a = a * a;
+    b = b * b;
+
+    return l + a + b;
+  }
+
+  static Dist(lab1, lab2) {
+    return Math.sqrt(OkLab.SqrDist(lab1, lab2));
+  }
+}
+
 class OkLab {
   constructor(l = 0, a = 0, b = 0) {
     this.l = l;
