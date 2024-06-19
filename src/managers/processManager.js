@@ -4,8 +4,8 @@ const ProcessManager = (function () {
   const maxFPS = 60;
 
   const ab = {
-    min: -0.311611,
-    max: 0.311611
+    min: -1,
+    max: 1
   };
 
   const debugStates = true;
@@ -14,16 +14,6 @@ const ProcessManager = (function () {
 
   let bgCol = HSLLab.RGBtoHSLLab(new sRGB(28 / 255, 28 / 255, 28 / 255));
   bgCol.l *= 1.5;
-
-  // ----- TEST -----
-
-  if (true) {
-    let hsl = HSL.RGBtoHSL(new sRGB(28 / 255, 28 / 255, 28 / 255));
-    console.log('--- TEST ---');
-    console.log('Deg to Rad: ', MathCustom.DegToRad);
-    console.log('HSL: ', hsl);
-    console.log('BG Col:', bgCol);
-  }
 
   const strokeCol = new HSLLab(bgCol.l > 0.5 ? 0 : 1, 0, 0);
 
@@ -75,6 +65,16 @@ const ProcessManager = (function () {
 
     setup() {
       state = 'setTarget';
+
+      // ----- TEST -----
+
+      if (true) {
+        // let hsl = HSL.RGBtoHSL(new sRGB(28 / 255, 28 / 255, 28 / 255));
+        console.log('--- TEST ---');
+        // console.log('Deg to Rad: ', MathCustom.DegToRad);
+        // console.log('HSL: ', hsl);
+        console.log('BG Col:', bgCol.P5Color);
+      }
     },
 
     draw(dt) {

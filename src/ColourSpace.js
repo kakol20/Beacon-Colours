@@ -211,10 +211,10 @@ class HSLLab {
   }
 
   get P5Color() {
-    let hsl = HSLLab.HSLLabtoHSL(this);
+    let hsl = HSLLab.HSLLabtoHSL(this.copy());
     hsl.fallback();
 
-    const srgb = HSLLab.HSLLabtoRGB(hsl);
+    const srgb = HSL.HSLtoRGB(hsl);
     return srgb.P5Color;
   }
 
