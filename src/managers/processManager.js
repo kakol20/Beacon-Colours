@@ -4,18 +4,18 @@ const ProcessManager = (function () {
   const maxFPS = 60;
 
   const ab = {
-    min: -1,
-    max: 1
+    min: -0.311611,
+    max: 0.311611
   };
 
   const debugStates = true;
 
-  let targetLab = HSLLab.RGBtoHSLLab(new sRGB(255 / 255, 0, 135 / 255));
+  let targetLab = OkLab.sRGBtoOKLab(new sRGB(255 / 255, 0, 135 / 255));
 
-  let bgCol = HSLLab.RGBtoHSLLab(new sRGB(28 / 255, 28 / 255, 28 / 255));
+  let bgCol = OkLab.sRGBtoOKLab(new sRGB(28 / 255, 28 / 255, 28 / 255));
   bgCol.l *= 1.5;
 
-  const strokeCol = new HSLLab(bgCol.l > 0.5 ? 0 : 1, 0, 0);
+  const strokeCol = new OkLab(bgCol.l > 0.5 ? 0 : 1, 0, 0);
 
   const padding = 25;
 
@@ -65,16 +65,6 @@ const ProcessManager = (function () {
 
     setup() {
       state = 'setTarget';
-
-      // ----- TEST -----
-
-      if (true) {
-        // let hsl = HSL.RGBtoHSL(new sRGB(28 / 255, 28 / 255, 28 / 255));
-        console.log('--- TEST ---');
-        // console.log('Deg to Rad: ', MathCustom.DegToRad);
-        // console.log('HSL: ', hsl);
-        console.log('BG Col:', bgCol.P5Color);
-      }
     },
 
     draw(dt) {
@@ -84,7 +74,7 @@ const ProcessManager = (function () {
 
       switch (state) {
         case 'setTarget':
-          targetLab = HSLLab.RGBtoHSLLab(sRGB.P5ColTosRGB(DOMManager.targetColorPicker.color()));
+          targetLab = OkLab.sRGBtoOKLab(sRGB.P5ColTosRGB(DOMManager.targetColorPicker.color()));
 
           chosenColours.length = 0;
           chosenColoursIndex.length = 0;
@@ -93,9 +83,7 @@ const ProcessManager = (function () {
 
           amount = DOMManager.amountInput.value() * 1;
 
-          console.log('Target Colour: ', (HSLLab.HSLLabtoRGB(targetLab)).CSSColor);
-          // console.log('Target Colour: ', HSLLab.HSLLabtoRGB(targetLab));
-          // console.log('Target Colour: ', targetLab);
+          console.log('Target Colour: ', (OkLab.OkLabtosRGB(targetLab)).CSSColor);
 
           this.changeState('generate');
           break;
@@ -104,12 +92,12 @@ const ProcessManager = (function () {
           if (chosenColours.length === 0) {
             let nextColour = dyesRGB[0].copy();
             let nextIndex = 0;
-            let dist = HSLLab.Dist(HSLLab.RGBtoHSLLab(nextColour), targetLab);
+            let dist = OkLab.Dist(OkLab.sRGBtoOKLab(nextColour), targetLab);
 
             for (let i = 1; i < dyesRGB.length; i++) {
               // console.log(dyesRGB[i]);
-              let currLab = HSLLab.RGBtoHSLLab(dyesRGB[i]);
-              let currDist = HSLLab.Dist(targetLab, currLab);
+              let currLab = OkLab.sRGBtoOKLab(dyesRGB[i]);
+              let currDist = OkLab.Dist(targetLab, currLab);
 
               // console.log(dyesRGB[i].CSSColor, currDist);
 
@@ -134,12 +122,12 @@ const ProcessManager = (function () {
 
             let nextColour = dyesRGB[0].copy();
             let nextIndex = 0;
-            let nextDist = HSLLab.Dist(HSLLab.RGBtoHSLLab(sRGB.average(nextColour, averagedCol)), targetLab);
+            let nextDist = OkLab.Dist(OkLab.sRGBtoOKLab(sRGB.average(nextColour, averagedCol)), targetLab);
 
             for (let i = 1; i < dyesRGB.length; i++) {
               let currAverage = sRGB.average(averagedCol, dyesRGB[i]);
-              let currLab = HSLLab.RGBtoHSLLab(currAverage);
-              let currDist = HSLLab.Dist(currLab, targetLab);
+              let currLab = OkLab.sRGBtoOKLab(currAverage);
+              let currDist = OkLab.Dist(currLab, targetLab);
 
               if (currDist < nextDist) {
                 nextColour = dyesRGB[i].copy();
@@ -207,7 +195,7 @@ const ProcessManager = (function () {
           averageCol = sRGB.average(averageCol, chosenColours[i]);
         }
 
-        let averageLab = HSLLab.RGBtoHSLLab(averageCol);
+        let averageLab = OkLab.sRGBtoOKLab(averageCol);
         DrawColor(averageLab, i === chosenColours.length - 1 ? 20 : 10);
       }
 
