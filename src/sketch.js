@@ -1,1 +1,7 @@
-function preload() { MainManager.preload() } function setup() { MainManager.setup() } function draw() { MainManager.draw(deltaTime / 1000.0) }
+function setup() {
+	createCanvas(400, 400);
+}
+
+function draw() {
+	background(28);
+}

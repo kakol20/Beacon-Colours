@@ -5,90 +5,35 @@
 	font-style: normal;
 }
 
-html,
 body {
-	margin: 0;
-	padding: 0;
-	background-color: rgb(28, 28, 28);
-	color: white;
 	font-family: 'Open Sans';
-	vertical-align: middle;
+
+	padding: 15px;
+	/* line-height: 1.75; */
+
+	background-color: color-mix(in oklab, Canvas, CanvasText 2.5%);
+	color: color-mix(in oklab, CanvasText, Canvas 15%);
+	color-scheme: light dark;
 }
 
+textarea {
+	width: 95%;
+}
+
+form {
+	font-weight: bold;
+	line-height: 1.75;
+}
+
+/* form span {
+	text-decoration-line: underline;
+	text-decoration-style: dotted;
+} */
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
 canvas {
-	display: block;
-}
-
-button {
-	border-width: 1px;
-	border-color: white;
-	border-style: outset;
-	border-radius: 3px;
-	position: relative;
-	width: auto;
-	height: auto;
-	flex: none;
-	vertical-align: middle;
-}
-
-input:not(#upload) {
-	border-width: 1px;
-	border-color: white;
-	border-style: outset;
-	border-radius: 3px;
-	position: relative;
-	width: auto;
-	height: auto;
-	flex: none;
-	vertical-align: middle;
-}
-
-select {
-	border-width: 1px;
-	border-color: white;
-	border-style: outset;
-	border-radius: 3px;
-	position: relative;
-	width: auto;
-	height: auto;
-	flex: none;
-	vertical-align: middle;
-}
-
-button:hover,
-button:focus {
-	border-width: 1px;
-	border-color: white;
-	border-style: inset;
-	border-radius: 3px;
-	position: relative;
-	width: auto;
-	height: auto;
-	flex: none;
-	vertical-align: middle;
-}
-
-input[type=file]::file-selector-button {
-	border-width: 1px;
-	border-color: white;
-	border-style: outset;
-	border-radius: 3px;
-	position: relative;
-	width: auto;
-	height: auto;
-	flex: none;
-	vertical-align: middle;
-}
-
-input[type=file]::file-selector-button:hover,
-input[type=file]::file-selector-button:focus {
-	border-width: 1px;
-	border-color: white;
-	border-style: inset;
-	border-radius: 3px;
-	position: relative;
-	width: auto;
-	height: auto;
-	flex: none;
-	vertical-align: middle;
+  display: block;
 }
