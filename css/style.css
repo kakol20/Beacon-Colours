@@ -1,12 +1,12 @@
 @font-face {
-	font-family: 'Open Sans';
-	src: url('opensans-regular-webfont.woff2') format('woff2'), url('opensans-regular-webfont.woff') format('woff');
+	font-family: 'Mojangles';
+	src: url('minecraftfont.woff') format('woff');
 	font-weight: normal;
 	font-style: normal;
 }
 
 body {
-	font-family: 'Open Sans';
+	font-family: 'Mojangles';
 
 	padding: 15px;
 	/* line-height: 1.75; */
