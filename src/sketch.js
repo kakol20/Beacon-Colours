@@ -33,7 +33,8 @@ const sketch = (p) => {
 
 		let domPos = p.createVector(
 			p.windowWidth > p.windowHeight ? p.width + 10 : 10,
-			p.windowHeight > p.windowWidth ? p.height + 10 : 10
+			//p.windowHeight > p.windowWidth ? p.height + 10 : 10
+			p.windowWidth > p.windowHeight ? 10 : p.height + 10
 		);
 
 		DOMs.colPicker = p.createColorPicker('rgb(0, 50, 150)');
