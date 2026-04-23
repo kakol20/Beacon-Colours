@@ -1,4 +1,4 @@
-import { calculateBeacons } from "./calculate.js";
+import { CalculateBeacons, TestCalculate } from "./calculate.js";
 import { RGBToHex, HexToRGB, Colour } from "./colour.js";
 
 export const DOMs = {
@@ -87,13 +87,15 @@ const sketch = (p) => {
 		DOMs.button.position(domPos.x, domPos.y);
 		DOMs.button.mousePressed(calculate);
 
-		calculateBeacons.setup(p);
+		CalculateBeacons.setup(p);
+
+		TestCalculate();
 	};
 
 	p.draw = () => {
 		p.background(28);
 
-		calculateBeacons.draw(p);
+		CalculateBeacons.draw(p);
 	};
 
 	function onRGBChange() {
@@ -117,7 +119,7 @@ const sketch = (p) => {
 	}
 
 	function calculate() {
-		calculateBeacons.calculate(p);
+		CalculateBeacons.calculate(p);
 	}
 };
 

@@ -6,6 +6,16 @@ export class Colour {
 	}
 }
 
+function ToLRGB(val) {
+	let r = 0;
+	if (val <= OkLab.X) {
+		r = val / OkLab.A;
+	} else {
+		r = Math.pow((val + OkLab.C) / (OkLab.C + 1), OkLab.Y);
+	}
+	return r;
+}
+
 class OkLab {
 	constructor(l, a, b) {
 		this.l = l;
@@ -18,20 +28,10 @@ class OkLab {
 	static X = this.C / (this.Y - 1); // 0.03928
 	static A = (Math.pow(1 + this.C, this.Y) * Math.pow(this.Y - 1, this.Y - 1)) / (Math.pow(this.C, this.Y - 1) * Math.pow(this.Y, this.Y)); // 12.92
 
-	static ToLRGB = function(val) {
-		let r = 0;
-		if (val <= OkLab.X) {
-			r = val / OkLab.A;
-		} else {
-			r = Math.pow((val + OkLab.C) / (OkLab.C + 1), OkLab.Y);
-		}
-		return r;
-	}
-
 	static ToOkLab = function(col) {
 		if (col.r == col.g && col.r == col.b) {
 			// to Linear RGB
-			let l = OkLab.ToLRGB(col.r / 255);
+			let l = ToLRGB(col.r / 255);
 
 			// to LMS - can skip "to Linear LMS" conversion
 			l = Math.cbrt(l);
@@ -39,9 +39,9 @@ class OkLab {
 			return new OkLab(l, 0, 0);
 		} else {
 			// to Linear RGB
-			let l1 = OkLab.ToLRGB(col.r / 255);
-			let a1 = OkLab.ToLRGB(col.g / 255);
-			let b1 = OkLab.ToLRGB(col.b / 255);
+			let l1 = ToLRGB(col.r / 255);
+			let a1 = ToLRGB(col.g / 255);
+			let b1 = ToLRGB(col.b / 255);
 
 			// to Linear LMS
 			let l2 = 0.4122214708 * l1 + 0.5363325363 * a1 + 0.0514459929 * b1;
@@ -89,4 +89,77 @@ export function RGBToHex(col, p) {
 		p.hex(Math.floor(col.r) > 255 ? 255 : Math.floor(col.r), 2) +
 		p.hex(Math.floor(col.g) > 255 ? 255 : Math.floor(col.g), 2) +
 		p.hex(Math.floor(col.b) > 255 ? 255 : Math.floor(col.b), 2);
+}
+
+class XYZ {
+	constructor(x, y, z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+}
+
+class CIELab {
+	constructor(l, a, b) {
+		this.l = l;
+		this.a = a;
+		this.b = b;
+	}
+}
+
+function RGBtoXYZ(rgb) {
+	const r = ToLRGB(rgb.r / 255);
+	const g = ToLRGB(rgb.g / 255);
+	const b = ToLRGB(rgb.b / 255);
+
+	// http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
+	const x = 0.4124564 * r + 0.3575761 * g + 0.1804375 * b;
+	const y = 0.2126729 * r + 0.7151522 * g + 0.0721750 * b;
+	const z = 0.0193339 * r + 0.1191920 * g + 0.9503041 * b;
+
+	return new XYZ(x, y, z);
+}
+
+function XYZToCIELab(xyz) {
+	// http://www.brucelindbloom.com/index.html?Eqn_XYZ_to_Lab.html
+	const e = 216 / 24389;
+	const k = 24389 / 27;
+
+	const xr = xyz.x / refrenceWhite.x;
+	const yr = xyz.y / refrenceWhite.y;
+	const zr = xyz.z / refrenceWhite.z;
+
+	const fx = xr > e ? Math.cbrt(xr) : (k * xr + 16) / 116;
+	const fy = yr > e ? Math.cbrt(yr) : (k * yr + 16) / 116;
+	const fz = zr > e ? Math.cbrt(zr) : (k * zr + 16) / 116;
+
+	const L = 116 * fy - 16;
+	const a = 500 * (fx - fy);
+	const b = 200 * (fy - fz);
+
+	return new CIELab(L, a, b);
+}
+
+const refrenceWhite = new XYZ(0.95047, 1.0, 1.08883);
+
+// A & B are sRGB values 0 to 255
+export function DeltaE(a, b) {
+	// convert both to XYZ
+	const a_xyz = RGBtoXYZ(a);
+	const b_xyz = RGBtoXYZ(b);
+
+	// convert both to CIE Lab
+	const a_lab = XYZToCIELab(a_xyz);
+	const b_lab = XYZToCIELab(b_xyz);
+	
+	// Calculate Delta E
+	let l_2 = a_lab.l - b_lab.l;
+	let a_2 = a_lab.a - b_lab.a;
+	let b_2 = a_lab.b - b_lab.b;
+
+	l_2 *= l_2;
+	a_2 *= a_2;
+	b_2 *= b_2;
+
+	return Math.sqrt(l_2 + a_2 + b_2);
 }

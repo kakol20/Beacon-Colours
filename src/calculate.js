@@ -1,5 +1,5 @@
 import { DOMs } from './sketch.js';
-import { Colour, HexToRGB, RGBToHex, OutlineCol  } from './colour.js';
+import { Colour, HexToRGB, RGBToHex, OutlineCol, DeltaE} from './colour.js';
 
 const colourMap = new Map();
 
@@ -64,7 +64,7 @@ colourMap.set('green', new Glass('Green', '#5E7C16', drawLight));
 colourMap.set('red', new Glass('Red', '#B02E26', drawLight));
 colourMap.set('black', new Glass('Black', '#1D1D21', drawDark));
 
-export const calculateBeacons = {
+export const CalculateBeacons = {
 	setup: function(p) {
 		// console.log("Module test");
 		colourMap.forEach(async (value, key) => {
@@ -100,4 +100,12 @@ export const calculateBeacons = {
 		console.log("Button Pressed");
 		console.log(DOMs.colPicker.value());
 	}
+}
+
+export function TestCalculate() {
+	console.log(
+		colourMap.get('magenta').colour, 
+		colourMap.get('purple').colour, 
+		DeltaE(colourMap.get('magenta').colour, colourMap.get('purple').colour)
+	);
 }
