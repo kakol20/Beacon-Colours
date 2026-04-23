@@ -10,7 +10,7 @@ const LRGB = {
 	Y: 2.4,
 	C: 0.055,
 	X: 0.055 / (2.4 - 1), // 0.03928
-	A: (Math.pow(1 + 0.055, 2.4) * Math.pow(2.4 - 1, 2.4 - 1)) / 
+	A: (Math.pow(1 + 0.055, 2.4) * Math.pow(2.4 - 1, 2.4 - 1)) /
 		(Math.pow(0.055, 2.4 - 1) * Math.pow(2.4, 2.4)) // 12.92
 };
 
@@ -29,7 +29,7 @@ class OkLab {
 		this.b = b;
 	}
 
-	static ToOkLab = function(col) {
+	static ToOkLab = function (col) {
 		if (col.r == col.g && col.r == col.b) {
 			// to Linear RGB
 			let l = ToLRGB(col.r / 255);
@@ -64,6 +64,21 @@ class OkLab {
 	}
 }
 
+export function OkLabDistance(rgb1, rgb2) {
+	const lab1 = OkLab.ToOkLab(rgb1);
+	const lab2 = OkLab.ToOkLab(rgb2);
+
+	let l_2 = lab1.l - lab2.l;
+	let a_2 = lab1.a - lab2.a;
+	let b_2 = lab1.b - lab2.b;
+
+	l_2 *= l_2;
+	a_2 *= a_2;
+	b_2 *= b_2;
+
+	return Math.sqrt(l_2 + a_2 + b_2);
+}
+
 export function OutlineCol(col) {
 	let lab = OkLab.ToOkLab(col);
 
@@ -80,7 +95,7 @@ export function HexToRGB(Hex) {
 	// 	b: parseInt(result[3], 16)
 	// } : { r: 0, g: 0, b: 0 };
 
-	return result ? 
+	return result ?
 		new Colour(parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)) :
 		new Colour(0, 0, 0);
 }
@@ -152,7 +167,7 @@ export function DeltaE(a, b) {
 	// convert both to CIE Lab
 	const a_lab = XYZToCIELab(a_xyz);
 	const b_lab = XYZToCIELab(b_xyz);
-	
+
 	// Calculate Delta E
 	let l_2 = a_lab.l - b_lab.l;
 	let a_2 = a_lab.a - b_lab.a;

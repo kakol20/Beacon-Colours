@@ -1,5 +1,5 @@
 import { DOMs } from './sketch.js';
-import { Colour, HexToRGB, RGBToHex, OutlineCol, DeltaE} from './colour.js';
+import { Colour, HexToRGB, RGBToHex, OutlineCol, DeltaE, OkLabDistance } from './colour.js';
 
 const colourMap = new Map();
 
@@ -65,7 +65,7 @@ colourMap.set('red', new Glass('Red', '#B02E26', drawLight));
 colourMap.set('black', new Glass('Black', '#1D1D21', drawDark));
 
 export const CalculateBeacons = {
-	setup: function(p) {
+	setup: function (p) {
 		// console.log("Module test");
 		colourMap.forEach(async (value, key) => {
 			const imageLoc = '../glass/' + key + '_stained_glass.png';
@@ -79,7 +79,7 @@ export const CalculateBeacons = {
 		p.imageMode(p.CORNER);
 	},
 
-	draw: function(p) {
+	draw: function (p) {
 		p.noSmooth(); // The functions don't affect shapes or fonts
 
 		const gap = 10;
@@ -96,16 +96,26 @@ export const CalculateBeacons = {
 		// drawGlass(p, 'red', gap, gap, size, size);
 	},
 
-	calculate: function(p) {
+	calculate: function (p) {
 		console.log("Button Pressed");
 		console.log(DOMs.colPicker.value());
 	}
 }
 
 export function TestCalculate() {
+	const keyCompare = ['gray', 'black'];
+
 	console.log(
-		colourMap.get('gray').colour, 
-		colourMap.get('black').colour, 
-		DeltaE(colourMap.get('gray').colour, colourMap.get('black').colour)
+		"Delta E",
+		colourMap.get(keyCompare[0]).colour,
+		colourMap.get(keyCompare[1]).colour,
+		DeltaE(colourMap.get(keyCompare[0]).colour, colourMap.get(keyCompare[1]).colour)
+	);
+
+	console.log(
+		"OkLab Distance",
+		colourMap.get(keyCompare[0]).colour,
+		colourMap.get(keyCompare[1]).colour,
+		OkLabDistance(colourMap.get(keyCompare[0]).colour, colourMap.get(keyCompare[1]).colour)
 	);
 }

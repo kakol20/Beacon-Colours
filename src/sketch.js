@@ -4,16 +4,16 @@ import { RGBToHex, HexToRGB, Colour } from "./colour.js";
 export const DOMs = {
 	colPicker: null,
 
-  rgbInput: {
-    r: { input: null, label: null },
-    g: { input: null, label: null },
-    b: { input: null, label: null }
-  },
+	rgbInput: {
+		r: { input: null, label: null },
+		g: { input: null, label: null },
+		b: { input: null, label: null }
+	},
 
-  depthInput: {
-    input: null,
-    label: null
-  },
+	depthInput: {
+		input: null,
+		label: null
+	},
 
 	button: null
 }
