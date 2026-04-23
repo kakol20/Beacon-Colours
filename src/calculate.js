@@ -104,8 +104,8 @@ export const CalculateBeacons = {
 
 export function TestCalculate() {
 	console.log(
-		colourMap.get('magenta').colour, 
-		colourMap.get('purple').colour, 
-		DeltaE(colourMap.get('magenta').colour, colourMap.get('purple').colour)
+		colourMap.get('gray').colour, 
+		colourMap.get('black').colour, 
+		DeltaE(colourMap.get('gray').colour, colourMap.get('black').colour)
 	);
 }

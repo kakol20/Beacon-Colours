@@ -6,14 +6,20 @@ export class Colour {
 	}
 }
 
+const LRGB = {
+	Y: 2.4,
+	C: 0.055,
+	X: 0.055 / (2.4 - 1), // 0.03928
+	A: (Math.pow(1 + 0.055, 2.4) * Math.pow(2.4 - 1, 2.4 - 1)) / 
+		(Math.pow(0.055, 2.4 - 1) * Math.pow(2.4, 2.4)) // 12.92
+};
+
 function ToLRGB(val) {
-	let r = 0;
-	if (val <= OkLab.X) {
-		r = val / OkLab.A;
+	if (val <= LRGB.X) {
+		return val / LRGB.A;
 	} else {
-		r = Math.pow((val + OkLab.C) / (OkLab.C + 1), OkLab.Y);
+		return Math.pow((val + LRGB.C) / (LRGB.C + 1), LRGB.Y);
 	}
-	return r;
 }
 
 class OkLab {
@@ -22,11 +28,6 @@ class OkLab {
 		this.a = a;
 		this.b = b;
 	}
-
-	static Y = 2.4;
-	static C = 0.055;
-	static X = this.C / (this.Y - 1); // 0.03928
-	static A = (Math.pow(1 + this.C, this.Y) * Math.pow(this.Y - 1, this.Y - 1)) / (Math.pow(this.C, this.Y - 1) * Math.pow(this.Y, this.Y)); // 12.92
 
 	static ToOkLab = function(col) {
 		if (col.r == col.g && col.r == col.b) {
