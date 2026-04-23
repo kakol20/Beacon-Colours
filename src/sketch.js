@@ -22,7 +22,7 @@ const sketch = (p) => {
 		const size = Math.min(p.windowWidth, p.windowHeight);
 		p.createCanvas(size, size);
 
-		let font = await p.loadFont('css/minecraftfont.woff');
+		let font = await p.loadFont('css/seven.ttf');
 		p.textFont(font);
 		p.textAlign(p.LEFT, p.TOP);
 		p.fill(255);

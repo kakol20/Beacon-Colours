@@ -74,6 +74,8 @@ export const calculateBeacons = {
 			// console.log(key, value);
 		});
 
+		console.log(colourMap);
+
 		p.imageMode(p.CORNER);
 	},
 

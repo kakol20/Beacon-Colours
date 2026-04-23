@@ -66,7 +66,8 @@ class OkLab {
 export function OutlineCol(col) {
 	let lab = OkLab.ToOkLab(col);
 
-	return lab.l <= 0.5 ? new Colour(255, 255, 255) : new Colour(0, 0, 0);
+	// return lab.l <= 0.5 ? new Colour(255, 255, 255) : new Colour(0, 0, 0);
+	return lab.l <= (1 / 3) ? new Colour(255, 255, 255) : new Colour(0, 0, 0);
 }
 
 export function HexToRGB(Hex) {
