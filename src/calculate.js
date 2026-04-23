@@ -1,5 +1,5 @@
 import { DOMs } from './sketch.js';
-import { Colour, HexToRGB, rgbToHex, OutlineCol  } from './colour.js';
+import { Colour, HexToRGB, RGBToHex, OutlineCol  } from './colour.js';
 
 const colourMap = new Map();
 
@@ -27,9 +27,9 @@ function drawGlass(p, mapKey, x, y, width, height) {
 		colourMap.get(mapKey).draw(p, colourMap.get(mapKey).image, x, y, width, height);
 
 		p.textAlign(p.LEFT, p.CENTER);
-		p.fill(rgbToHex(colourMap.get(mapKey).colour, p));
+		p.fill(RGBToHex(colourMap.get(mapKey).colour, p));
 		p.strokeWeight(3);
-		p.stroke(rgbToHex(colourMap.get(mapKey).outline, p));
+		p.stroke(RGBToHex(colourMap.get(mapKey).outline, p));
 		p.textSize(height);
 
 		p.text(colourMap.get(mapKey).name, x + width + 10, y + (height / 2));

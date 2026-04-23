@@ -1,4 +1,5 @@
 import { calculateBeacons } from "./calculate.js";
+import { RGBToHex, HexToRGB, Colour } from "./colour.js";
 
 export const DOMs = {
 	colPicker: null,
@@ -100,14 +101,7 @@ const sketch = (p) => {
 		let g = p.constrain(p.int(DOMs.rgbInput.g.input.value()), 0, 255);
 		let b = p.constrain(p.int(DOMs.rgbInput.b.input.value()), 0, 255);
 
-		DOMs.colPicker.value(rgbToHex(r, g, b));
-	}
-
-	function rgbToHex(r, g, b) {
-		return '#' +
-			p.hex(r, 2) +
-			p.hex(g, 2) +
-			p.hex(b, 2);
+		DOMs.colPicker.value(RGBToHex(new Colour(r, g, b), p));
 	}
 
 	function onPickerChange() {
@@ -120,16 +114,6 @@ const sketch = (p) => {
 		DOMs.rgbInput.r.input.value(rgb.r);
 		DOMs.rgbInput.g.input.value(rgb.g);
 		DOMs.rgbInput.b.input.value(rgb.b);
-	}
-
-	function HexToRGB(Hex) {
-		let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(Hex);
-		// return result ? [[parseInt(result[1], 16)], [parseInt(result[2], 16)], [parseInt(result[3], 16)]]: [[]];
-		return result ? {
-			r: parseInt(result[1], 16),
-			g: parseInt(result[2], 16),
-			b: parseInt(result[3], 16)
-		} : { r: 0, g: 0, b: 0 };
 	}
 
 	function calculate() {

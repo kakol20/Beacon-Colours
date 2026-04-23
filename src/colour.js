@@ -84,7 +84,7 @@ export function HexToRGB(Hex) {
 		new Colour(0, 0, 0);
 }
 
-export function rgbToHex(col, p) {
+export function RGBToHex(col, p) {
 	return '#' +
 		p.hex(Math.floor(col.r) > 255 ? 255 : Math.floor(col.r), 2) +
 		p.hex(Math.floor(col.g) > 255 ? 255 : Math.floor(col.g), 2) +
