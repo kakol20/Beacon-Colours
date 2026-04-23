@@ -1,3 +1,5 @@
+import { calculateBeacons } from "./calculate.js";
+
 export const DOMs = {
 	colPicker: null,
 
@@ -27,7 +29,7 @@ const sketch = (p) => {
 		p.textWrap(p.WORD);
 		p.textSize(15);
 
-		p.noLoop();
+		// p.noLoop();
 
 		let domPos = p.createVector(
 			p.windowWidth > p.windowHeight ? p.width + 10 : 10,
@@ -80,10 +82,14 @@ const sketch = (p) => {
 		DOMs.button = p.createButton('Calculate');
 		DOMs.button.position(domPos.x, domPos.y);
 		DOMs.button.mousePressed(calculate);
+
+		calculateBeacons.setup(p);
 	};
 
 	p.draw = () => {
-		p.background(20);
+		p.background(28);
+
+		calculateBeacons.draw(p);
 	};
 
 	function onRGBChange() {
@@ -124,7 +130,7 @@ const sketch = (p) => {
 	}
 
 	function calculate() {
-		console.log("Button Pressed");
+		calculateBeacons.calculate(p);
 	}
 };
 
