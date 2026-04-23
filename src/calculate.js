@@ -1,21 +1,5 @@
 import { DOMs } from './sketch.js';
-
-function rgbToHex(r, g, b, p) {
-	return '#' +
-		p.hex(r, 2) +
-		p.hex(g, 2) +
-		p.hex(b, 2);
-}
-
-function HexToRGB(Hex) {
-	let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(Hex);
-	// return result ? [[parseInt(result[1], 16)], [parseInt(result[2], 16)], [parseInt(result[3], 16)]]: [[]];
-	return result ? {
-		r: parseInt(result[1], 16),
-		g: parseInt(result[2], 16),
-		b: parseInt(result[3], 16)
-	} : { r: 0, g: 0, b: 0 };
-}
+import { Colour, HexToRGB, rgbToHex, OutlineCol  } from './colour.js';
 
 const colourMap = new Map();
 
@@ -32,38 +16,62 @@ function drawLight(p, img, x, y, width, height) {
 function drawGlass(p, mapKey, x, y, width, height) {
 	// colourMap.get(mapKey).draw(p, colourMap.get(mapKey).image, x, y, width, height);
 
+	/*
+		p.textAlign(p.LEFT, p.TOP);
+		p.fill(255);
+		p.textWrap(p.WORD);
+		p.textSize(15);
+	*/
+
 	if (colourMap.get(mapKey).image) {
 		colourMap.get(mapKey).draw(p, colourMap.get(mapKey).image, x, y, width, height);
+
+		p.textAlign(p.LEFT, p.CENTER);
+		p.fill(rgbToHex(colourMap.get(mapKey).colour, p));
+		p.strokeWeight(3);
+		p.stroke(rgbToHex(colourMap.get(mapKey).outline, p));
+		p.textSize(height);
+
+		p.text(colourMap.get(mapKey).name, x + width + 10, y + (height / 2));
 	}
 }
 
-colourMap.set('white', { image: null, colour: null, hex: '#F9FFFE', name: 'White', draw: drawLight});
-colourMap.set('orange', { image: null, colour: null, hex: '#F9801D', name: 'Orange', draw: drawLight});
-colourMap.set('magenta', { image: null, colour: null, hex: '#C74EBD', name: 'Magenta', draw: drawLight});
-colourMap.set('light_blue', { image: null, colour: null, hex: '#3AB3DA', name: 'Light Blue', draw: drawLight});
-colourMap.set('yellow', { image: null, colour: null, hex: '#FED83D', name: 'Yellow', draw: drawLight});
-colourMap.set('lime', { image: null, colour: null, hex: '#80C71F', name: 'Lime', draw: drawLight});
-colourMap.set('pink', { image: null, colour: null, hex: '#F38BAA', name: 'Pink', draw: drawLight});
-colourMap.set('gray', { image: null, colour: null, hex: '#474F52', name: 'Gray', draw: drawLight});
-colourMap.set('light_gray', { image: null, colour: null, hex: '#9D9D97', name: 'Light Gray', draw: drawLight});
-colourMap.set('cyan', { image: null, colour: null, hex: '#169C9C', name: 'Cyan', draw: drawLight});
-colourMap.set('purple', { image: null, colour: null, hex: '#8932B8', name: 'Purple', draw: drawLight});
-colourMap.set('blue', { image: null, colour: null, hex: '#3C44AA', name: 'Blue', draw: drawLight});
-colourMap.set('brown', { image: null, colour: null, hex: '#835432', name: 'Brown', draw: drawLight});
-colourMap.set('green', { image: null, colour: null, hex: '#5E7C16', name: 'Green', draw: drawLight});
-colourMap.set('red', { image: null, colour: null, hex: '#B02E26', name: 'Red', draw: drawLight});
-colourMap.set('black', { image: null, colour: null, hex: '#1D1D21', name: 'Black', draw: drawDark});
+class Glass {
+	constructor(name, hex, drawFunc) {
+		this.name = name;
+		this.hex = hex;
+		this.draw = drawFunc;
+		this.colour = HexToRGB(this.hex);
+		this.image = null;
+		this.outline = OutlineCol(this.colour);
+	}
+}
+
+colourMap.set('white', new Glass('White', '#F9FFFE', drawLight));
+colourMap.set('orange', new Glass('Orange', '#F9801D', drawLight));
+colourMap.set('magenta', new Glass('Magenta', '#C74EBD', drawLight));
+colourMap.set('light_blue', new Glass('Light Blue', '#3AB3DA', drawLight));
+colourMap.set('yellow', new Glass('Yellow', '#FED83D', drawLight));
+colourMap.set('lime', new Glass('Lime', '#80C71F', drawLight));
+colourMap.set('pink', new Glass('Pink', '#F38BAA', drawLight));
+colourMap.set('gray', new Glass('Gray', '#474F52', drawLight));
+colourMap.set('light_gray', new Glass('Light Gray', '#9D9D97', drawLight));
+colourMap.set('cyan', new Glass('Cyan', '#169C9C', drawLight));
+colourMap.set('purple', new Glass('Purple', '#8932B8', drawLight));
+colourMap.set('blue', new Glass('Blue', '#3C44AA', drawLight));
+colourMap.set('brown', new Glass('Brown', '#835432', drawLight));
+colourMap.set('green', new Glass('Green', '#5E7C16', drawLight));
+colourMap.set('red', new Glass('Red', '#B02E26', drawLight));
+colourMap.set('black', new Glass('Black', '#1D1D21', drawDark));
 
 export const calculateBeacons = {
 	setup: function(p) {
 		// console.log("Module test");
 		colourMap.forEach(async (value, key) => {
-			value.colour = HexToRGB(value.hex);
-
 			const imageLoc = '../glass/' + key + '_stained_glass.png';
 
 			value.image = await p.loadImage(imageLoc);
-			console.log(key, value);
+			// console.log(key, value);
 		});
 
 		p.imageMode(p.CORNER);
@@ -72,24 +80,18 @@ export const calculateBeacons = {
 	draw: function(p) {
 		p.noSmooth(); // The functions don't affect shapes or fonts
 
-		const size = 50;
 		const gap = 10;
+		const size = Math.min(50, ((p.height - gap) / 16) - gap);
 
 		let index = 0;
-		let y = gap;
+		// let y = gap;
 
 		colourMap.forEach((value, key) => {
-			let x = (index * (size + gap)) + gap;
-			if (x + size + gap > p.width) {
-				index = 0;
-				x = (index * (size + gap)) + gap;
-				y += size + gap;
-			}
-
+			drawGlass(p, key, gap, gap + ((size + 10) * index), size, size);
 			++index;
-
-			drawGlass(p, key, x, y, size, size);
 		});
+
+		// drawGlass(p, 'red', gap, gap, size, size);
 	},
 
 	calculate: function(p) {
