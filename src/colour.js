@@ -156,6 +156,7 @@ function XYZToCIELab(xyz) {
 	return new CIELab(L, a, b);
 }
 
+// D65
 const refrenceWhite = new XYZ(0.95047, 1.0, 1.08883);
 
 // A & B are sRGB values 0 to 255
