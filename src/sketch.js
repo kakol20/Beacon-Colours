@@ -70,13 +70,15 @@ const sketch = (p) => {
 		domPos.y += DOMs.rgbInput.b.input.height + 10;
 
 		onPickerChange();
-
-		DOMs.depthInput.label = await p.createElement('label', 'Depth');
+		DOMs.depthInput.label = await p.createDiv('Depth');
 		DOMs.depthInput.label.position(domPos.x, domPos.y);
-		DOMs.depthInput.input = p.createInput('6', 'number');
+		DOMs.depthInput.input = await p.createInput('6', 'number');
 		DOMs.depthInput.input.attribute('min', 1);
 		DOMs.depthInput.input.attribute('max', 15);
-		DOMs.depthInput.input.position(domPos.x + DOMs.depthInput.label.width + 20, domPos.y);
+		// let depthLabelWidth = DOMs.depthInput.label.width;
+		let depthLabelWidth = 56;
+		// console.log(depthLabelWidth);
+		DOMs.depthInput.input.position(domPos.x + depthLabelWidth + 5, domPos.y);
 		domPos.y += DOMs.depthInput.input.height + 10;
 
 		DOMs.button = p.createButton('Calculate');

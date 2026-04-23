@@ -63,7 +63,7 @@ export const calculateBeacons = {
 			const imageLoc = '../glass/' + key + '_stained_glass.png';
 
 			value.image = await p.loadImage(imageLoc);
-			// console.log(key, value);
+			console.log(key, value);
 		});
 
 		p.imageMode(p.CORNER);
@@ -72,7 +72,7 @@ export const calculateBeacons = {
 	draw: function(p) {
 		p.noSmooth(); // The functions don't affect shapes or fonts
 
-		const size = 100;
+		const size = 50;
 		const gap = 10;
 
 		let index = 0;
@@ -94,5 +94,6 @@ export const calculateBeacons = {
 
 	calculate: function(p) {
 		console.log("Button Pressed");
+		console.log(DOMs.colPicker.value());
 	}
 }

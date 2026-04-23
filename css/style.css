@@ -37,3 +37,10 @@ html, body {
 canvas {
   display: block;
 }
+
+div {
+	width: fit-content;
+	height: fit-content;
+	inline-size: fit-content;
+	block-size: fit-content;
+}
