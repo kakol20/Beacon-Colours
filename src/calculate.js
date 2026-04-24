@@ -22,15 +22,6 @@ function drawLight(p, img, x, y, width, height) {
 }
 
 function drawGlass(p, mapKey, x, y, width, height) {
-	// colourMap.get(mapKey).draw(p, colourMap.get(mapKey).image, x, y, width, height);
-
-	/*
-		p.textAlign(p.LEFT, p.TOP);
-		p.fill(255);
-		p.textWrap(p.WORD);
-		p.textSize(15);
-	*/
-
 	if (colourMap.get(mapKey).image) {
 		colourMap.get(mapKey).draw(p, colourMap.get(mapKey).image, x, y, width, height);
 
@@ -192,7 +183,7 @@ function SolveBeacon(target, depth, beamWidth = 256) {
 		colour: start,
 		path: [],
 		oklabDist: OkLabDistance(start, target),
-		deltaE: DeltaE(start, target)
+		deltaE: OkLabDistance(start, target) * 100
 	}];
 
 	let best = states[0];
@@ -215,7 +206,7 @@ function SolveBeacon(target, depth, beamWidth = 256) {
 					colour: newColour,
 					path: [...state.path, key],
 					oklabDist: OkLabDistance(newColour, target),
-					deltaE: DeltaE(newColour, target)
+					deltaE: OkLabDistance(newColour, target) * 100
 				};
 
 				nextStates.push(newState);
