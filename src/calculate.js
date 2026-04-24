@@ -1,13 +1,13 @@
 import { DOMs } from './sketch.js';
-import { 
-	Colour, 
-	HexToRGB, 
-	RGBToHex, 
-	OutlineCol, 
-	DeltaE, 
+import {
+	Colour,
+	HexToRGB,
+	RGBToHex,
+	OutlineCol,
+	DeltaE,
 	OkLabDistance,
 	DeltaEToScale
- } from './colour.js';
+} from './colour.js';
 
 const colourMap = new Map();
 
@@ -120,14 +120,14 @@ export const CalculateBeacons = {
 
 			p.fill(finalHex);
 			p.stroke(RGBToHex(OutlineCol(bestPath.colour), p));
-			p.text(finalColStr, 
+			p.text(finalColStr,
 				gap, gap + ((size + 10) * index) + (size / 2));
 			++index;
 
 			const deltaEScale = DeltaEToScale(bestPath.deltaE);
 			p.fill(RGBToHex(deltaEScale, p));
 			p.stroke(RGBToHex(OutlineCol(deltaEScale), p));
-			p.text('Delta E: ' + Number.parseFloat(bestPath.deltaE).toFixed(2), 
+			p.text('Delta E: ' + Number.parseFloat(bestPath.deltaE).toFixed(2),
 				gap, gap + ((size + 10) * index) + (size / 2));
 		}
 

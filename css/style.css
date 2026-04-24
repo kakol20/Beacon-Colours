@@ -30,12 +30,14 @@ form {
 	text-decoration-style: dotted;
 } */
 
-html, body {
-  margin: 0;
-  padding: 0;
+html,
+body {
+	margin: 0;
+	padding: 0;
 }
+
 canvas {
-  display: block;
+	display: block;
 }
 
 div {
