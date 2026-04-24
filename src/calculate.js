@@ -68,7 +68,7 @@ let bestPath = null;
 
 export const CalculateBeacons = {
 	setup: function (p) {
-		// console.log("Module test");
+		// console.log('Module test');
 		colourMap.forEach(async (value, key) => {
 			const imageLoc = '../glass/' + key + '_stained_glass.png';
 
@@ -85,21 +85,41 @@ export const CalculateBeacons = {
 		p.noSmooth(); // The functions don't affect shapes or fonts
 
 		const gap = 10;
-		const size = Math.min(50, ((p.height - gap) / 16) - gap);
+		
 
 		let index = 0;
 		// let y = gap;
 
-		colourMap.forEach((value, key) => {
-			drawGlass(p, key, gap, gap + ((size + 10) * index), size, size);
-			++index;
-		});
+		/*
+			colourMap.forEach((value, key) => {
+				drawGlass(p, key, gap, gap + ((size + 10) * index), size, size);
+				++index;
+			});
+		*/
+
+		// Temporary
+		if (bestPath != null) {
+			const size = Math.min(50, ((p.height - gap) / bestPath.path.length) - gap);
+
+			p.textAlign(p.LEFT, p.CENTER);
+
+			p.fill(RGBToHex(bestPath.colour, p));
+			p.strokeWeight(3);
+			p.stroke(RGBToHex(OutlineCol(bestPath.colour), p));
+			p.textSize(size);
+			p.text('Final Colour', 10, 10 + (size / 2));
+
+			p.fill(255);
+			p.stroke(0);
+			p.text('Delta E: ' + Number.parseFloat(bestPath.deltaE).toFixed(2), 
+				10, 20 + size + (size / 2));
+		}
 
 		// drawGlass(p, 'red', gap, gap, size, size);
 	},
 
 	calculate: function (p) {
-		console.log("==========");
+		console.log('==========');
 		console.log(DOMs.colPicker.value());
 
 		const depth = DOMs.depthInput.input.value();
@@ -107,7 +127,7 @@ export const CalculateBeacons = {
 
 		bestPath = SolveBeacon(target, depth, 256);
 		console.log(bestPath);
-		console.log("==========");
+		console.log(bestPath.path.join(' -> '));
 	}
 }
 
@@ -115,14 +135,14 @@ export function TestCalculate() {
 	const keyCompare = ['gray', 'black'];
 
 	console.log(
-		"Delta E",
+		'Delta E',
 		colourMap.get(keyCompare[0]).colour,
 		colourMap.get(keyCompare[1]).colour,
 		DeltaE(colourMap.get(keyCompare[0]).colour, colourMap.get(keyCompare[1]).colour)
 	);
 
 	console.log(
-		"OkLab Distance",
+		'OkLab Distance',
 		colourMap.get(keyCompare[0]).colour,
 		colourMap.get(keyCompare[1]).colour,
 		OkLabDistance(colourMap.get(keyCompare[0]).colour, colourMap.get(keyCompare[1]).colour)
