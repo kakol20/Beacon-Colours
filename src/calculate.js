@@ -95,7 +95,7 @@ export const CalculateBeacons = {
 		const gap = 10;
 
 		if (bestPath != null) {
-			let size = Math.min(50, ((p.height - gap) / (bestPath.path.length + 3)) - gap);
+			let size = Math.min(50, ((p.height - gap) / (bestPath.path.length + 2)) - gap);
 			p.textAlign(p.LEFT, p.CENTER);
 
 			p.strokeWeight(3);
@@ -106,7 +106,7 @@ export const CalculateBeacons = {
 			const finalColW = p.textWidth(finalColStr);
 
 			if (finalColW > p.width - 20) {
-				size *= (p.width - 20) / finalColW;
+				size *= (p.width - 30) / finalColW;
 			}
 
 			let index = 0;
@@ -117,19 +117,20 @@ export const CalculateBeacons = {
 			}
 			++index;
 
-			const deltaEScale = DeltaEToScale(bestPath.deltaE);
-			p.fill(RGBToHex(deltaEScale, p));
-			p.stroke(RGBToHex(OutlineCol(deltaEScale), p));
-			p.text('Delta E: ' + Number.parseFloat(bestPath.deltaE).toFixed(2),
-				gap, gap + ((size + 10) * index) + (size / 2));
-			++index;
-
-			// To avoid overflowing over other text this is placed at the bottom
 			p.textAlign(p.LEFT, p.TOP);
+
 			p.fill(finalHex);
 			p.stroke(RGBToHex(OutlineCol(bestPath.colour), p));
 			p.text(finalColStr,
 				gap, gap + ((size + 10) * index), p.width - 20);
+			++index;
+
+			const deltaEScale = DeltaEToScale(bestPath.deltaE);
+			p.fill(RGBToHex(deltaEScale, p));
+			p.stroke(RGBToHex(OutlineCol(deltaEScale), p));
+			p.text('Delta E: ' + Number.parseFloat(bestPath.deltaE).toFixed(2),
+				gap, gap + ((size + 10) * index));
+			++index;
 		}
 
 		// drawGlass(p, 'red', gap, gap, size, size);
