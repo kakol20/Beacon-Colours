@@ -221,7 +221,7 @@ function SolveBeacon(target, depth, beamWidth = 256) {
 		states = nextStates.slice(0, beamWidth);
 
 		// Early exit if close enough
-		// https://www.viewsonic.com/library/creative-work/what-is-delta-e-and-why-is-it-important-for-color-accuracy/#:~:text=%3C%3D%201.0%3A%20Not%20perceptible,exactly%20the%20opposite
+		// https://zschuessler.github.io/DeltaE/learn/
 		if (best.deltaE <= 3.0) break;
 	}
 
