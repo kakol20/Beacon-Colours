@@ -159,10 +159,26 @@ export function TestCalculate() {
 	);
 }
 
+function ClosestStartColour(target) {
+	let bestKey = 'white';
+	let bestDist = OkLabDistance(target, colourMap.get(bestKey).colour);
+
+	colourMap.forEach((value, key) => {
+		const dist = OkLabDistance(target, value.colour);
+		if (dist < bestDist) {
+			bestKey = key;
+			bestDist = dist;
+		}
+	});
+
+	return bestKey;
+}
+
 function SolveBeacon(target, depth, beamWidth = 256) {
 	console.log('parameters', target, depth, beamWidth);
 
-	const start = colourMap.get('white').colour;
+	const bestKey = ClosestStartColour(target);
+	const start = colourMap.get(bestKey).colour;
 
 	let states = [{
 		colour: start,
@@ -202,8 +218,8 @@ function SolveBeacon(target, depth, beamWidth = 256) {
 		if (best.deltaE <= 3.0) break;
 	}
 
-	// One white glass generated the best path if path array empty
-	if (best.path.length === 0) best.path = ['white'];
+	// One glass of starting colour generated the best path if path array empty
+	if (best.path.length === 0) best.path = [bestKey];
 
 	return best;
 }
