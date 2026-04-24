@@ -4,7 +4,6 @@ import {
 	HexToRGB,
 	RGBToHex,
 	OutlineCol,
-	DeltaE,
 	OkLabDistance,
 	DeltaEToScale
 } from './colour.js';
