@@ -118,7 +118,7 @@ export const CalculateBeacons = {
 			const deltaEScale = DeltaEToScale(bestPath.oklabDist * 100);
 			p.fill(RGBToHex(deltaEScale, p));
 			p.stroke(RGBToHex(OutlineCol(deltaEScale), p));
-			p.text('Delta E: ' + Number.parseFloat(bestPath.deltaE).toFixed(2),
+			p.text('Delta E: ' + Number.parseFloat(bestPath.oklabDist * 100).toFixed(2),
 				gap, gap + ((size + 10) * index));
 			++index;
 		}
@@ -141,13 +141,6 @@ export const CalculateBeacons = {
 
 export function TestCalculate() {
 	const keyCompare = ['gray', 'black'];
-
-	console.log(
-		'Delta E',
-		colourMap.get(keyCompare[0]).colour,
-		colourMap.get(keyCompare[1]).colour,
-		DeltaE(colourMap.get(keyCompare[0]).colour, colourMap.get(keyCompare[1]).colour)
-	);
 
 	console.log(
 		'OkLab Distance',
