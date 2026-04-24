@@ -74,9 +74,9 @@ const sketch = (p) => {
 		onPickerChange();
 		DOMs.depthInput.label = await p.createDiv('Depth');
 		DOMs.depthInput.label.position(domPos.x, domPos.y);
-		DOMs.depthInput.input = await p.createInput('6', 'number');
+		DOMs.depthInput.input = await p.createInput('16', 'number');
 		DOMs.depthInput.input.attribute('min', 1);
-		DOMs.depthInput.input.attribute('max', 15);
+		DOMs.depthInput.input.attribute('max', 16);
 		// let depthLabelWidth = DOMs.depthInput.label.width;
 		let depthLabelWidth = 56;
 		// console.log(depthLabelWidth);
@@ -90,6 +90,7 @@ const sketch = (p) => {
 		CalculateBeacons.setup(p);
 
 		// TestCalculate();
+		CalculateBeacons.calculate(p);
 	};
 
 	p.draw = () => {
