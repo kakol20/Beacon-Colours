@@ -97,9 +97,16 @@ export const CalculateBeacons = {
 			});
 		*/
 
-		// Temporary
 		if (bestPath != null) {
-			const size = Math.min(50, ((p.height - gap) / bestPath.path.length) - gap);
+			const size = Math.min(50, ((p.height - gap) / (bestPath.path.length + 2)) - gap);
+
+			let index = 0;
+			for (let i = 0; i < bestPath.path.length; ++i) {
+				index = i;
+
+				drawGlass(p, bestPath.path[i], gap, gap + ((size + 10) * index), size, size);
+			}
+			++index;
 
 			p.textAlign(p.LEFT, p.CENTER);
 
@@ -108,12 +115,14 @@ export const CalculateBeacons = {
 			p.strokeWeight(3);
 			p.stroke(RGBToHex(OutlineCol(bestPath.colour), p));
 			p.textSize(size);
-			p.text('Final Colour: ' + finalHex, 10, 10 + (size / 2));
+			p.text('Final Colour: ' + finalHex, 
+				gap, gap + ((size + 10) * index) + (size / 2));
+			++index;
 
 			p.fill(255);
 			p.stroke(0);
 			p.text('Delta E: ' + Number.parseFloat(bestPath.deltaE).toFixed(2), 
-				10, 20 + size + (size / 2));
+				gap, gap + ((size + 10) * index) + (size / 2));
 		}
 
 		// drawGlass(p, 'red', gap, gap, size, size);
@@ -192,6 +201,9 @@ function SolveBeacon(target, depth, beamWidth = 256) {
 		// https://www.viewsonic.com/library/creative-work/what-is-delta-e-and-why-is-it-important-for-color-accuracy/#:~:text=%3C%3D%201.0%3A%20Not%20perceptible,exactly%20the%20opposite
 		if (best.deltaE <= 3.0) break;
 	}
+
+	// One white glass generated the best path if path array empty
+	if (best.path.length === 0) best.path = ['white'];
 
 	return best;
 }
