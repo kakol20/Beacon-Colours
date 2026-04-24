@@ -95,7 +95,7 @@ export const CalculateBeacons = {
 		const gap = 10;
 
 		if (bestPath != null) {
-			let size = Math.min(50, ((p.height - gap) / (bestPath.path.length + 2)) - gap);
+			let size = Math.min(50, ((p.height - gap) / (bestPath.path.length + 3)) - gap);
 			p.textAlign(p.LEFT, p.CENTER);
 
 			p.strokeWeight(3);
