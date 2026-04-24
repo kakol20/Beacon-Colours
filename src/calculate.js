@@ -194,13 +194,20 @@ function SolveBeacon(target, depth, beamWidth = 256) {
 
 		for (const state of states) {
 			colourMap.forEach((value, key) => {
-				const newColor = Colour.Average(state.colour, value.colour);
+				//const newColor = Colour.Average(state.colour, value.colour);
+				let newColour = null;
+				if (state.path.length === 0) {
+					// Starting colour at path
+					newColour = value.colour;
+				} else {
+					newColour = Colour.Average(state.colour, value.colour);
+				}
 
 				const newState = {
-					colour: newColor,
+					colour: newColour,
 					path: [...state.path, key],
-					oklabDist: OkLabDistance(newColor, target),
-					deltaE: DeltaE(newColor, target)
+					oklabDist: OkLabDistance(newColour, target),
+					deltaE: DeltaE(newColour, target)
 				};
 
 				nextStates.push(newState);
