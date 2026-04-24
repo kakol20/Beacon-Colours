@@ -1,13 +1,13 @@
 import { DOMs } from './sketch.js';
-import { 
-	Colour, 
-	HexToRGB, 
-	RGBToHex, 
-	OutlineCol, 
-	DeltaE, 
+import {
+	Colour,
+	HexToRGB,
+	RGBToHex,
+	OutlineCol,
+	DeltaE,
 	OkLabDistance,
 	DeltaEToScale
- } from './colour.js';
+} from './colour.js';
 
 const colourMap = new Map();
 
@@ -93,20 +93,21 @@ export const CalculateBeacons = {
 		p.noSmooth(); // The functions don't affect shapes or fonts
 
 		const gap = 10;
-		
-
-		let index = 0;
-		// let y = gap;
-
-		/*
-			colourMap.forEach((value, key) => {
-				drawGlass(p, key, gap, gap + ((size + 10) * index), size, size);
-				++index;
-			});
-		*/
 
 		if (bestPath != null) {
-			const size = Math.min(50, ((p.height - gap) / (bestPath.path.length + 2)) - gap);
+			let size = Math.min(50, ((p.height - gap) / (bestPath.path.length + 2)) - gap);
+			p.textAlign(p.LEFT, p.CENTER);
+
+			p.strokeWeight(3);
+			p.textSize(size);
+
+			const finalHex = RGBToHex(bestPath.colour, p);
+			const finalColStr = 'Final Colour: ' + finalHex;
+			const finalColW = p.textWidth(finalColStr);
+
+			if (finalColW > p.width - 20) {
+				size *= (p.width - 20) / finalColW;
+			}
 
 			let index = 0;
 			for (let i = 0; i < bestPath.path.length; ++i) {
@@ -116,21 +117,17 @@ export const CalculateBeacons = {
 			}
 			++index;
 
-			p.textAlign(p.LEFT, p.CENTER);
 
-			const finalHex = RGBToHex(bestPath.colour, p);
 			p.fill(finalHex);
-			p.strokeWeight(3);
 			p.stroke(RGBToHex(OutlineCol(bestPath.colour), p));
-			p.textSize(size);
-			p.text('Final Colour: ' + finalHex, 
+			p.text(finalColStr,
 				gap, gap + ((size + 10) * index) + (size / 2));
 			++index;
 
 			const deltaEScale = DeltaEToScale(bestPath.deltaE);
 			p.fill(RGBToHex(deltaEScale, p));
 			p.stroke(RGBToHex(OutlineCol(deltaEScale), p));
-			p.text('Delta E: ' + Number.parseFloat(bestPath.deltaE).toFixed(2), 
+			p.text('Delta E: ' + Number.parseFloat(bestPath.deltaE).toFixed(2),
 				gap, gap + ((size + 10) * index) + (size / 2));
 		}
 

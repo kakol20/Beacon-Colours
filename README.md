@@ -1,1 +1,2 @@
-# P5.JS-Template
+# Minecraft Beacon Light Colour
+Calculate Beacon Light Colour
