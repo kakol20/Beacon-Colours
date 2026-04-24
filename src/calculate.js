@@ -117,18 +117,19 @@ export const CalculateBeacons = {
 			}
 			++index;
 
-
-			p.fill(finalHex);
-			p.stroke(RGBToHex(OutlineCol(bestPath.colour), p));
-			p.text(finalColStr,
-				gap, gap + ((size + 10) * index) + (size / 2));
-			++index;
-
 			const deltaEScale = DeltaEToScale(bestPath.deltaE);
 			p.fill(RGBToHex(deltaEScale, p));
 			p.stroke(RGBToHex(OutlineCol(deltaEScale), p));
 			p.text('Delta E: ' + Number.parseFloat(bestPath.deltaE).toFixed(2),
 				gap, gap + ((size + 10) * index) + (size / 2));
+			++index;
+
+			// To avoid overflowing over other text this is placed at the bottom
+			p.textAlign(p.LEFT, p.TOP);
+			p.fill(finalHex);
+			p.stroke(RGBToHex(OutlineCol(bestPath.colour), p));
+			p.text(finalColStr,
+				gap, gap + ((size + 10) * index), p.width - 20);
 		}
 
 		// drawGlass(p, 'red', gap, gap, size, size);
