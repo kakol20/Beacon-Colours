@@ -144,6 +144,9 @@ function RGBtoXYZ(rgb) {
 	return new XYZ(x, y, z);
 }
 
+// D65
+const refrenceWhite = new XYZ(0.95047, 1.0, 1.08883);
+
 function XYZToCIELab(xyz) {
 	// http://www.brucelindbloom.com/index.html?Eqn_XYZ_to_Lab.html
 	const e = 216 / 24389;
@@ -163,9 +166,6 @@ function XYZToCIELab(xyz) {
 
 	return new CIELab(L, a, b);
 }
-
-// D65
-const refrenceWhite = new XYZ(0.95047, 1.0, 1.08883);
 
 // A & B are sRGB values 0 to 255
 export function DeltaE(a, b) {
