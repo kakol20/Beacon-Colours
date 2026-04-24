@@ -4,6 +4,14 @@ export class Colour {
 		this.g = g;
 		this.b = b;
 	}
+
+	static Average(a, b) {
+		return new Colour(
+			(a.r + b.r) / 2,
+			(a.g + b.g) / 2,
+			(a.b + b.b) / 2,
+		);
+	}
 }
 
 const LRGB = {

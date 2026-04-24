@@ -89,7 +89,7 @@ const sketch = (p) => {
 
 		CalculateBeacons.setup(p);
 
-		TestCalculate();
+		// TestCalculate();
 	};
 
 	p.draw = () => {

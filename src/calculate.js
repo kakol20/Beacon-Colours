@@ -64,6 +64,8 @@ colourMap.set('green', new Glass('Green', '#5E7C16', drawLight));
 colourMap.set('red', new Glass('Red', '#B02E26', drawLight));
 colourMap.set('black', new Glass('Black', '#1D1D21', drawDark));
 
+let bestPath = null;
+
 export const CalculateBeacons = {
 	setup: function (p) {
 		// console.log("Module test");
@@ -97,8 +99,15 @@ export const CalculateBeacons = {
 	},
 
 	calculate: function (p) {
-		console.log("Button Pressed");
+		console.log("==========");
 		console.log(DOMs.colPicker.value());
+
+		const depth = DOMs.depthInput.input.value();
+		const target = HexToRGB(DOMs.colPicker.value());
+
+		bestPath = SolveBeacon(target, depth, 256);
+		console.log(bestPath);
+		console.log("==========");
 	}
 }
 
@@ -118,4 +127,47 @@ export function TestCalculate() {
 		colourMap.get(keyCompare[1]).colour,
 		OkLabDistance(colourMap.get(keyCompare[0]).colour, colourMap.get(keyCompare[1]).colour)
 	);
+}
+
+function SolveBeacon(target, depth, beamWidth = 256) {
+	const start = colourMap.get('white').colour;
+
+	let states = [{
+		colour: start,
+		path: [],
+		oklabDist: OkLabDistance(start, target),
+		deltaE: DeltaE(start, target)
+	}];
+
+	let best = states[0];
+
+	for (let d = 0; d < depth; ++d) {
+		const nextStates = [];
+
+		for (const state of states) {
+			colourMap.forEach((value, key) => {
+				const newColor = Colour.Average(state.colour, value.colour);
+
+				const newState = {
+					colour: newColor,
+					path: [...state.path, key],
+					oklabDist: OkLabDistance(newColor, target),
+					deltaE: DeltaE(newColor, target)
+				};
+
+				nextStates.push(newState);
+
+				if (newState.oklabDist < best.oklabDist) best = newState;
+			});
+		}
+
+		// Keep only best candidates
+		nextStates.sort((a, b) => a.oklabDist - b.oklabDist);
+		states = nextStates.slice(0, beamWidth);
+
+		// Early exit if close enough
+		if (best.deltaE <= 2.0) break;
+	}
+
+	return best;
 }
