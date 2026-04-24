@@ -164,10 +164,14 @@ export function HexToRGB(Hex) {
 }
 
 export function RGBToHex(col, p) {
+	const r = p.constrain(Math.floor(col.r), 0, 255);
+	const g = p.constrain(Math.floor(col.g), 0, 255);
+	const b = p.constrain(Math.floor(col.b), 0, 255);
+
 	return '#' +
-		p.hex(Math.floor(col.r) > 255 ? 255 : Math.floor(col.r), 2) +
-		p.hex(Math.floor(col.g) > 255 ? 255 : Math.floor(col.g), 2) +
-		p.hex(Math.floor(col.b) > 255 ? 255 : Math.floor(col.b), 2);
+		p.hex(r, 2) +
+		p.hex(g, 2) +
+		p.hex(b, 2);
 }
 
 class XYZ {
