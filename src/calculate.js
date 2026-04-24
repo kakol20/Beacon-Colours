@@ -150,6 +150,8 @@ export function TestCalculate() {
 }
 
 function SolveBeacon(target, depth, beamWidth = 256) {
+	console.log('parameters', target, depth, beamWidth);
+
 	const start = colourMap.get('white').colour;
 
 	let states = [{
@@ -186,7 +188,8 @@ function SolveBeacon(target, depth, beamWidth = 256) {
 		states = nextStates.slice(0, beamWidth);
 
 		// Early exit if close enough
-		if (best.deltaE <= 2.0) break;
+		// https://www.viewsonic.com/library/creative-work/what-is-delta-e-and-why-is-it-important-for-color-accuracy/#:~:text=%3C%3D%201.0%3A%20Not%20perceptible,exactly%20the%20opposite
+		if (best.deltaE <= 3.0) break;
 	}
 
 	return best;
