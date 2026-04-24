@@ -262,8 +262,8 @@ export function DeltaEToScale(deltaE) {
 		let result = OkLab.Interpolate(deltaEScale[0], deltaEScale[1], t);
 		return OkLab.TosRGB(result);
 	} else {
-		let t = deltaE > 20 ? 20 : deltaE;
-		t = (t - 10) / 10;
+		let t = deltaE > 50 ? 50 : deltaE;
+		t = (t - 10) / 40;
 		let result = OkLab.Interpolate(deltaEScale[1], deltaEScale[2], t);
 		return OkLab.TosRGB(result);
 	}
