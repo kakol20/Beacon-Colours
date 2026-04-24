@@ -103,11 +103,12 @@ export const CalculateBeacons = {
 
 			p.textAlign(p.LEFT, p.CENTER);
 
-			p.fill(RGBToHex(bestPath.colour, p));
+			const finalHex = RGBToHex(bestPath.colour, p);
+			p.fill(finalHex);
 			p.strokeWeight(3);
 			p.stroke(RGBToHex(OutlineCol(bestPath.colour), p));
 			p.textSize(size);
-			p.text('Final Colour', 10, 10 + (size / 2));
+			p.text('Final Colour: ' + finalHex, 10, 10 + (size / 2));
 
 			p.fill(255);
 			p.stroke(0);
