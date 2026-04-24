@@ -30,6 +30,14 @@ function ToLRGB(val) {
 	}
 }
 
+function LinearTosRGB(val) {
+	if (val <= LRGB.X / LRGB.A) {
+		return val * LRGB.A;
+	} else {
+		return (LRGB.C + 1) * Math.pow(val, 1 / LRGB.Y) - LRGB.C;
+	}
+}
+
 class OkLab {
 	constructor(l, a, b) {
 		this.l = l;
@@ -69,6 +77,53 @@ class OkLab {
 
 			return new OkLab(l2, a2, b2);
 		}
+	}
+
+	static TosRGB(lab) {
+		if (lab.a == 0. && lab.b == 0) {
+			// if graycale - can skip some conversions
+			let r = lab.l;
+
+			// to Linear LMS - can skip "to LMS" conversion
+			r = r * r * r;
+
+			r = LinearTosRGB(r);
+			r *= 255;
+			return new Colour(r, r, r);
+		} else {
+			let r1 = lab.l;
+			let g1 = lab.a;
+			let b1 = lab.b;
+
+			// to LMS
+
+			let r2 = r1 + 0.3963377774 * g1 + 0.2158037573 * b1;
+			let g2 = r1 - 0.1055613458 * g1 - 0.0638541728 * b1;
+			let b2 = r1 - 0.0894841775 * g1 - 1.2914855480 * b1;
+
+			// to Linear LMS
+			r1 = r2 * r2 * r2;
+			g1 = g2 * g2 * g2;
+			b1 = b2 * b2 * b2;
+
+			// to Linear RGB
+			r2 = +4.0767416621 * r1 - 3.3077115913 * g1 + 0.2309699292 * b1;
+			g2 = -1.2684380046 * r1 + 2.6097574011 * g1 - 0.3413193965 * b1;
+			b2 = -0.0041960863 * r1 - 0.7034186147 * g1 + 1.7076147010 * b1;
+
+			r2 *= 255;
+			g2 *= 255;
+			b2 *= 255;
+
+			return new Colour(r2, g2, b2);
+		}
+	}
+
+	static Interpolate(lab1, lab2, t) {
+		const l = (lab2.l - lab1.l) * t + lab1.l;
+		const a = (lab2.a - lab1.a) * t + lab1.a;
+		const b = (lab2.b - lab1.b) * t + lab1.b;
+		return new OkLab(l, a, b);
 	}
 }
 
@@ -187,4 +242,25 @@ export function DeltaE(a, b) {
 	b_2 *= b_2;
 
 	return Math.sqrt(l_2 + a_2 + b_2);
+}
+
+const deltaEScale = [
+	OkLab.ToOkLab(new Colour(87, 187, 138)), // green - Delta E == 0
+	OkLab.ToOkLab(new Colour(255, 215, 102)), // yellow - Delta E == 10 
+	OkLab.ToOkLab(new Colour(230, 124, 115)) // red - Delta E >= 20
+];
+
+export function DeltaEToScale(deltaE) {
+	if (deltaE <= 10) {
+		let t = deltaE < 0 ? 0 : deltaE;
+		t /= 10;
+		
+		let result = OkLab.Interpolate(deltaEScale[0], deltaEScale[1], t);
+		return OkLab.TosRGB(result);
+	} else {
+		let t = deltaE > 20 ? 20 : deltaE;
+		t = (t - 10) / 10;
+		let result = OkLab.Interpolate(deltaEScale[1], deltaEScale[2], t);
+		return OkLab.TosRGB(result);
+	}
 }
