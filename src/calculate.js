@@ -78,7 +78,7 @@ export const CalculateBeacons = {
 	setup: function (p) {
 		// console.log('Module test');
 		colourMap.forEach(async (value, key) => {
-			const imageLoc = '../glass/' + key + '_stained_glass.png';
+			const imageLoc = '/glass/' + key + '_stained_glass.png';
 
 			value.image = await p.loadImage(imageLoc);
 			// console.log(key, value);
