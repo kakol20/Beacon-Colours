@@ -116,7 +116,7 @@ export const CalculateBeacons = {
 				gap, gap + ((size + 10) * index), p.width - 20);
 			++index;
 
-			const deltaEScale = DeltaEToScale(bestPath.deltaE);
+			const deltaEScale = DeltaEToScale(bestPath.oklabDist * 100);
 			p.fill(RGBToHex(deltaEScale, p));
 			p.stroke(RGBToHex(OutlineCol(deltaEScale), p));
 			p.text('Delta E: ' + Number.parseFloat(bestPath.deltaE).toFixed(2),
@@ -182,8 +182,7 @@ function SolveBeacon(target, depth, beamWidth = 256) {
 	let states = [{
 		colour: start,
 		path: [],
-		oklabDist: OkLabDistance(start, target),
-		deltaE: OkLabDistance(start, target) * 100
+		oklabDist: OkLabDistance(start, target)
 	}];
 
 	let best = states[0];
@@ -205,8 +204,7 @@ function SolveBeacon(target, depth, beamWidth = 256) {
 				const newState = {
 					colour: newColour,
 					path: [...state.path, key],
-					oklabDist: OkLabDistance(newColour, target),
-					deltaE: OkLabDistance(newColour, target) * 100
+					oklabDist: OkLabDistance(newColour, target)
 				};
 
 				nextStates.push(newState);
@@ -221,7 +219,7 @@ function SolveBeacon(target, depth, beamWidth = 256) {
 
 		// Early exit if close enough
 		// https://zschuessler.github.io/DeltaE/learn/
-		if (best.deltaE <= 3.0) break;
+		if (best.oklabDist * 100 <= 3.0) break;
 	}
 
 	// One glass of starting colour generated the best path if path array empty

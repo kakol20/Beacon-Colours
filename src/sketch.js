@@ -38,7 +38,7 @@ const sketch = (p) => {
 			p.windowWidth > p.windowHeight ? 10 : p.height + 10
 		);
 
-		DOMs.colPicker = p.createColorPicker('rgb(0, 102, 94)');
+		DOMs.colPicker = p.createColorPicker('rgb(255, 255, 0)');
 		DOMs.colPicker.position(domPos.x, domPos.y);
 		DOMs.colPicker.size(50, 50);
 		DOMs.colPicker.input(onPickerChange);
