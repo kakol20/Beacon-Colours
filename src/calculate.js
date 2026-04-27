@@ -5,7 +5,8 @@ import {
 	RGBToHex,
 	OutlineCol,
 	OkLabDistance,
-	DeltaEToScale
+	DeltaEToScale,
+	Lightness
 } from './colour.js';
 
 const colourMap = new Map();
@@ -85,7 +86,7 @@ export const CalculateBeacons = {
 		const gap = 10;
 
 		if (bestPath != null) {
-			let size = Math.min(50, ((p.height - gap) / (bestPath.path.length + 2)) - gap);
+			let size = Math.min(50, ((p.height - gap) / (bestPath.path.length + 3)) - gap);
 			p.textAlign(p.LEFT, p.CENTER);
 
 			p.strokeWeight(3);
@@ -96,14 +97,14 @@ export const CalculateBeacons = {
 			const finalColW = p.textWidth(finalColStr);
 
 			if (finalColW > p.width - 20) {
-				size *= (p.width - 30) / finalColW;
+				size *= (p.width - gap * 3) / finalColW;
 			}
 
 			let index = 0;
 			for (let i = 0; i < bestPath.path.length; ++i) {
 				index = i;
 
-				drawGlass(p, bestPath.path[i], gap, gap + ((size + 10) * index), size, size);
+				drawGlass(p, bestPath.path[i], gap, gap + ((size + gap) * index), size, size);
 			}
 			++index;
 
@@ -119,11 +120,38 @@ export const CalculateBeacons = {
 			p.fill(RGBToHex(deltaEScale, p));
 			p.stroke(RGBToHex(OutlineCol(deltaEScale), p));
 			p.text('Delta E: ' + Number.parseFloat(bestPath.oklabDist * 100).toFixed(2),
-				gap, gap + ((size + 10) * index));
+				gap, gap + (size + 10) * index);
 			++index;
-		}
 
-		// drawGlass(p, 'red', gap, gap, size, size);
+			const yPos = gap + (size + 10) * index;
+
+			// Visual Colour Comparison
+			p.noStroke();
+			p.textAlign(p.CENTER, p.CENTER);
+			
+			p.fill(DOMs.colPicker.value());
+			p.rect(0, yPos, p.width / 2, p.height - yPos);
+
+			p.fill(finalHex);
+			p.rect(p.width / 2, yPos, p.width / 2, p.height - yPos);
+
+			// Colour indicator
+			let lightness = Lightness(HexToRGB(DOMs.colPicker.value()));
+			if (lightness > 0.5) {
+				p.fill(0);
+			} else {
+				p.fill(255);
+			}
+			p.text('Target', 0, yPos, p.width / 2, p.height - yPos);
+
+			lightness = Lightness(bestPath.colour);
+			if (lightness > 0.5) {
+				p.fill(0);
+			} else {
+				p.fill(255);
+			}
+			p.text('Final', p.width / 2, yPos, p.width / 2, p.height - yPos);
+		}
 	},
 
 	calculate: function (p) {

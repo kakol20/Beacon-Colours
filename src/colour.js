@@ -151,6 +151,10 @@ export function OutlineCol(col) {
 		new Colour(0, 0, 0);
 }
 
+export function Lightness(col) {
+	return OkLab.ToOkLab(col).l;
+}
+
 export function HexToRGB(Hex) {
 	let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(Hex);
 
