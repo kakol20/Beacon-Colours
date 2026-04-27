@@ -205,9 +205,38 @@ function SolveBeacon(target, depth, beamWidth = 256) {
 			});
 		}
 
-		// Keep only best candidates
+		// Keep only best candidates - weighted
 		nextStates.sort((a, b) => a.oklabDist - b.oklabDist);
-		states = nextStates.slice(0, beamWidth);
+
+		if (nextStates.length > beamWidth) {
+			let pool = [...nextStates];
+			states = [];
+
+			// select first two thirds
+			for (let i = 0; i < (2 * beamWidth) / 3; ++i) {
+				states.push(pool[0]);
+				pool.splice(0, 1);
+			}
+
+			while (states.length < beamWidth && pool.length > 0) {
+				// Weights: first item gets biggest weight
+				let weights = pool.map((_, i) => pool.length - i);
+
+				let total = weights.reduce((a, b) => a.oklabDist + b.oklabDist, 0);
+				let r = Math.random() * total;
+
+				let index = 0;
+				while (r >= weights[index]) {
+					r -= weights[index];
+					++index;
+				}
+
+				states.push(pool[index]);
+				pool.splice(index, 1); // remove chosen item
+			}
+		} else {
+			states = [...nextStates];
+		}
 
 		// Early exit if close enough
 		// https://zschuessler.github.io/DeltaE/learn/
