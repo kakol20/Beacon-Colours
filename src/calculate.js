@@ -206,7 +206,12 @@ function SolveBeacon(target, depth, beamWidth = 256) {
 		}
 
 		// Keep only best candidates - weighted
-		nextStates.sort((a, b) => a.oklabDist - b.oklabDist);
+		// nextStates.sort((a, b) => a.oklabDist - b.oklabDist);
+		nextStates.sort((a, b) => {
+			if (a.oklabDist !== b.oklabDist) return a.oklabDist - b.oklabDist;
+			return OkLabDistance(colourMap.get(a.path[0]), target) - 
+				OkLabDistance(colourMap.get(b.path[0]), target);
+		});
 
 		if (nextStates.length > beamWidth) {
 			let pool = [...nextStates];
