@@ -38,7 +38,7 @@ const sketch = (p) => {
 			p.windowWidth > p.windowHeight ? 10 : p.height + 10
 		);
 
-		DOMs.colPicker = p.createColorPicker('rgb(255, 255, 0)');
+		DOMs.colPicker = p.createColorPicker('rgb(0, 0, 0)');
 		DOMs.colPicker.position(domPos.x, domPos.y);
 		DOMs.colPicker.size(50, 50);
 		DOMs.colPicker.input(onPickerChange);
@@ -71,7 +71,12 @@ const sketch = (p) => {
 		DOMs.rgbInput.b.input.input(onRGBChange);
 		domPos.y += DOMs.rgbInput.b.input.height + 10;
 
-		onPickerChange();
+		DOMs.rgbInput.r.input.value(p.constrain(Math.floor(Math.random() * 256), 0, 255));
+		DOMs.rgbInput.g.input.value(p.constrain(Math.floor(Math.random() * 256), 0, 255));
+		DOMs.rgbInput.b.input.value(p.constrain(Math.floor(Math.random() * 256), 0, 255));
+
+		onRGBChange();
+
 		DOMs.depthInput.label = await p.createDiv('Depth');
 		DOMs.depthInput.label.position(domPos.x, domPos.y);
 		DOMs.depthInput.input = await p.createInput('16', 'number');
