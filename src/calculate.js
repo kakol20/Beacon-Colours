@@ -130,7 +130,7 @@ export const CalculateBeacons = {
 			p.textAlign(p.CENTER, p.CENTER);
 			
 			p.fill(DOMs.colPicker.value());
-			p.rect(0, yPos, p.width / 2, p.height - yPos);
+			p.rect(0, yPos, (p.width / 2) + gap, p.height - yPos);
 
 			p.fill(finalHex);
 			p.rect(p.width / 2, yPos, p.width / 2, p.height - yPos);
