@@ -77,11 +77,15 @@ const sketch = (p) => {
 
 		onRGBChange();
 
+		const gap = 10;
+		const maxDepth = Math.floor(((p.height - gap) / (16 + gap)) - 3);
+		console.log('maxDepth', maxDepth);
+
 		DOMs.depthInput.label = await p.createDiv('Depth');
 		DOMs.depthInput.label.position(domPos.x, domPos.y);
-		DOMs.depthInput.input = await p.createInput('16', 'number');
+		DOMs.depthInput.input = await p.createInput(maxDepth.toString(), 'number');
 		DOMs.depthInput.input.attribute('min', 1);
-		DOMs.depthInput.input.attribute('max', 16);
+		DOMs.depthInput.input.attribute('max', maxDepth);
 		// let depthLabelWidth = DOMs.depthInput.label.width;
 		let depthLabelWidth = 56;
 		// console.log(depthLabelWidth);

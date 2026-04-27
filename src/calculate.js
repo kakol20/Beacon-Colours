@@ -158,7 +158,10 @@ export const CalculateBeacons = {
 		console.log('==========');
 		console.log(DOMs.colPicker.value());
 
-		const depth = DOMs.depthInput.input.value();
+		const gap = 10;
+		const maxDepth = Math.floor(((p.height - gap) / (16 + gap)) - 3);
+
+		const depth = Math.min(maxDepth, DOMs.depthInput.input.value());
 		const target = HexToRGB(DOMs.colPicker.value());
 
 		bestPath = SolveBeacon(target, depth, 256);
