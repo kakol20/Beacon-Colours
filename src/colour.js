@@ -143,20 +143,16 @@ export function OkLabDistance(rgb1, rgb2) {
 }
 
 export function OutlineCol(col) {
-	let lab = OkLab.ToOkLab(col);
+	// let lab = OkLab.ToOkLab(col);
+	const compare = new Colour(28, 28, 28);
 
-	// return lab.l <= 0.5 ? new Colour(255, 255, 255) : new Colour(0, 0, 0);
-	return lab.l <= (1 / 3) ? new Colour(255, 255, 255) : new Colour(0, 0, 0);
+	return OkLabDistance(col, compare) * 100 < 1 ?
+		new Colour(255, 255, 255) :
+		new Colour(0, 0, 0);
 }
 
 export function HexToRGB(Hex) {
 	let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(Hex);
-	// return result ? [[parseInt(result[1], 16)], [parseInt(result[2], 16)], [parseInt(result[3], 16)]]: [[]];
-	// return result ? {
-	// 	r: parseInt(result[1], 16),
-	// 	g: parseInt(result[2], 16),
-	// 	b: parseInt(result[3], 16)
-	// } : { r: 0, g: 0, b: 0 };
 
 	return result ?
 		new Colour(parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)) :
@@ -182,8 +178,9 @@ const deltaEScale = [
 
 export function DeltaEToScale(deltaE) {
 	if (deltaE <= 10) {
-		let t = deltaE < 0 ? 0 : deltaE;
-		t /= 10;
+		let t = deltaE < 1 ? 1 : deltaE;
+		--t;
+		t /= 9;
 
 		let result = OkLab.Interpolate(deltaEScale[0], deltaEScale[1], t);
 		return OkLab.TosRGB(result);
