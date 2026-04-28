@@ -86,6 +86,12 @@ export const CalculateBeacons = {
 		const gap = 10;
 
 		if (bestPath != null) {
+			p.textAlign(p.CENTER, p.TOP);
+			p.noStroke();
+			p.fill(24);
+			p.textSize(50);
+			p.text(bestPath.path.length, p.width / 2, gap);
+
 			let size = Math.min(50, ((p.height - gap) / (bestPath.path.length + 3)) - gap);
 			p.textAlign(p.LEFT, p.CENTER);
 
@@ -276,7 +282,7 @@ function SolveBeacon(target, depth, beamWidth = 256) {
 
 		// Early exit if close enough
 		// https://zschuessler.github.io/DeltaE/learn/
-		if (best.oklabDist * 100 <= 1.0) break;
+		if (best.oklabDist * 100 <= 0.5) break;
 	}
 
 	// One glass of starting colour generated the best path if path array empty
