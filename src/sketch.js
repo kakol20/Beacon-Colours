@@ -18,6 +18,8 @@ export const DOMs = {
 	button: null
 }
 
+let bgImg = null;
+
 let mouse = {
 	lastPressed: Date.now(),
 	count: 0,
@@ -33,7 +35,9 @@ const sketch = (p) => {
 		p.textAlign(p.LEFT, p.TOP);
 		p.fill(255);
 		p.textWrap(p.WORD);
-		p.textSize(15);
+		// p.textSize(15);
+
+		bgImg = await p.loadImage('misc/bg.png');
 
 		// p.noLoop();
 
@@ -108,7 +112,16 @@ const sketch = (p) => {
 	};
 
 	p.draw = () => {
-		p.background(28);
+		if (bgImg) {
+			for (let y = 0; y < p.height; y += bgImg.height) {
+				for (let x = 0; x < p.width; x += bgImg.width) {
+					p.image(bgImg, x, y);
+				}
+			}
+		} else {
+			p.background(28);
+		}
+		
 
 		CalculateBeacons.draw(p);
 	};
