@@ -18,6 +18,11 @@ export const DOMs = {
 	button: null
 }
 
+let mouse = {
+	lastPressed: Date.now(),
+	count: 0,
+};
+
 const sketch = (p) => {
 	p.setup = async () => {
 		const size = Math.min(p.windowWidth, p.windowHeight);
@@ -106,6 +111,31 @@ const sketch = (p) => {
 		p.background(28);
 
 		CalculateBeacons.draw(p);
+	};
+
+	p.mousePressed = () => {
+		// console.log(mouse);
+		let current = Date.now();
+		// console.log('Mouse Pressed', Date.now());
+
+		if (current - mouse.lastPressed <= 500) {
+			++mouse.count;
+		} else {
+			mouse.count = 0;
+		}
+
+		if (mouse.count >= 2) {
+			mouse.count = 0;
+
+			DOMs.rgbInput.r.input.value(p.constrain(Math.floor(Math.random() * 256), 0, 255));
+			DOMs.rgbInput.g.input.value(p.constrain(Math.floor(Math.random() * 256), 0, 255));
+			DOMs.rgbInput.b.input.value(p.constrain(Math.floor(Math.random() * 256), 0, 255));
+
+			onRGBChange();
+			CalculateBeacons.calculate(p);
+		}
+
+		mouse.lastPressed = current;
 	};
 
 	function onRGBChange() {
