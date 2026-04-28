@@ -88,7 +88,7 @@ export const CalculateBeacons = {
 		if (bestPath != null) {
 			p.textAlign(p.CENTER, p.TOP);
 			p.noStroke();
-			p.fill(24);
+			p.fill(30);
 			p.textSize(50);
 			p.text(bestPath.path.length, p.width / 2, gap);
 
