@@ -122,7 +122,6 @@ const sketch = (p) => {
 			p.background(28);
 		}
 
-
 		CalculateBeacons.draw(p);
 	};
 
