@@ -145,6 +145,10 @@ export function OkLabDistance(rgb1, rgb2) {
 export function OutlineCol(col) {
 	// let lab = OkLab.ToOkLab(col);
 	const compare = new Colour(28, 28, 28);
+	const colLab = OkLab.ToOkLab(col);
+	const bgLab = OkLab.ToOkLab(new Colour(28, 28, 28));
+
+	if (colLab.l <= bgLab.l) return new Colour(255, 255, 255);
 
 	return OkLabDistance(col, compare) * 100 < 1 ?
 		new Colour(255, 255, 255) :
