@@ -46,22 +46,22 @@ class Glass {
 	}
 }
 
-colourMap.set('white', new Glass('White', '#F9FFFE', drawLight));
-colourMap.set('orange', new Glass('Orange', '#F9801D', drawLight));
-colourMap.set('magenta', new Glass('Magenta', '#C74EBD', drawLight));
-colourMap.set('light_blue', new Glass('Light Blue', '#3AB3DA', drawLight));
-colourMap.set('yellow', new Glass('Yellow', '#FED83D', drawLight));
-colourMap.set('lime', new Glass('Lime', '#80C71F', drawLight));
-colourMap.set('pink', new Glass('Pink', '#F38BAA', drawLight));
-colourMap.set('gray', new Glass('Gray', '#474F52', drawLight));
-colourMap.set('light_gray', new Glass('Light Gray', '#9D9D97', drawLight));
-colourMap.set('cyan', new Glass('Cyan', '#169C9C', drawLight));
-colourMap.set('purple', new Glass('Purple', '#8932B8', drawLight));
-colourMap.set('blue', new Glass('Blue', '#3C44AA', drawLight));
-colourMap.set('brown', new Glass('Brown', '#835432', drawLight));
-colourMap.set('green', new Glass('Green', '#5E7C16', drawLight));
-colourMap.set('red', new Glass('Red', '#B02E26', drawLight));
-colourMap.set('black', new Glass('Black', '#1D1D21', drawDark));
+colourMap.set('white', new Glass('White', '#ffffff', drawLight));
+// colourMap.set('orange', new Glass('Orange', '#F9801D', drawLight));
+colourMap.set('magenta', new Glass('Magenta', '#FF00FF', drawLight));
+// colourMap.set('light_blue', new Glass('Light Blue', '#3AB3DA', drawLight));
+colourMap.set('yellow', new Glass('Yellow', '#FFFF00', drawLight));
+colourMap.set('lime', new Glass('Lime', '#00FF00', drawLight));
+// colourMap.set('pink', new Glass('Pink', '#F38BAA', drawLight));
+colourMap.set('gray', new Glass('Gray', '#363636', drawLight));
+colourMap.set('light_gray', new Glass('Light Gray', '#949494', drawLight));
+colourMap.set('cyan', new Glass('Cyan', '#00FFFF', drawLight));
+colourMap.set('purple', new Glass('Purple', '#800080', drawLight));
+colourMap.set('blue', new Glass('Blue', '#0000FF', drawLight));
+// colourMap.set('brown', new Glass('Brown', '#835432', drawLight));
+colourMap.set('green', new Glass('Green', '#008000', drawLight));
+colourMap.set('red', new Glass('Red', '#FF0000', drawLight));
+colourMap.set('black', new Glass('Black', '#000000', drawDark));
 
 let bestPath = null;
 
