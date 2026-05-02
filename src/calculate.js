@@ -134,7 +134,7 @@ export const CalculateBeacons = {
 			// Visual Colour Comparison
 			p.noStroke();
 			p.textAlign(p.CENTER, p.CENTER);
-			
+
 			p.fill(DOMs.colPicker.value());
 			p.rect(0, yPos, (p.width / 2) + gap, p.height - yPos);
 
@@ -246,7 +246,7 @@ function SolveBeacon(target, depth, beamWidth = 256) {
 		// nextStates.sort((a, b) => a.oklabDist - b.oklabDist);
 		nextStates.sort((a, b) => {
 			if (a.oklabDist !== b.oklabDist) return a.oklabDist - b.oklabDist;
-			return OkLabDistance(colourMap.get(a.path[0]), target) - 
+			return OkLabDistance(colourMap.get(a.path[0]), target) -
 				OkLabDistance(colourMap.get(b.path[0]), target);
 		});
 
