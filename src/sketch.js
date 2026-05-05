@@ -80,9 +80,9 @@ const sketch = (p) => {
 		DOMs.rgbInput.b.input.input(onRGBChange);
 		domPos.y += DOMs.rgbInput.b.input.height + 10;
 
-		DOMs.rgbInput.r.input.value(p.constrain(Math.floor(Math.random() * 256), 0, 255));
-		DOMs.rgbInput.g.input.value(p.constrain(Math.floor(Math.random() * 256), 0, 255));
-		DOMs.rgbInput.b.input.value(p.constrain(Math.floor(Math.random() * 256), 0, 255));
+		DOMs.rgbInput.r.input.value(24);
+		DOMs.rgbInput.g.input.value(186);
+		DOMs.rgbInput.b.input.value(152);
 
 		onRGBChange();
 
