@@ -86,14 +86,25 @@ export const CalculateBeacons = {
 		const gap = 10;
 
 		if (bestPath != null) {
-			p.textAlign(p.CENTER, p.TOP);
-			p.noStroke();
-			p.fill(30);
-			p.textSize(50);
-			p.text(bestPath.path.length, p.width / 2, gap);
-
 			let size = Math.min(50, ((p.height - gap) / (bestPath.path.length + 3)) - gap);
 			p.textAlign(p.LEFT, p.CENTER);
+
+			p.textAlign(p.CENTER, p.CENTER);
+			p.strokeWeight(3);
+			p.stroke(25);
+			p.fill(30);
+			p.textSize(50);
+
+			const colComp = gap + (size + gap) * (bestPath.path.length + 3);
+			// p.text(bestPath.path.length, p.width / 2, gap);
+			for (let y = 25; y <= colComp + 50; y += 50) {
+				for (let x = 25; x <= p.width + 50; x += 50) {
+					if (y % 100 === 25 && x % 100 === 75) continue;
+					if (y % 100 === 75 && x % 100 === 25) continue;
+
+					p.text(bestPath.path.length, x, y);
+				}
+			}
 
 			p.strokeWeight(3);
 			p.textSize(size);
@@ -129,7 +140,7 @@ export const CalculateBeacons = {
 				gap, gap + (size + 10) * index);
 			++index;
 
-			const yPos = gap + (size + 10) * index;
+			const yPos = gap + (size + gap) * index;
 
 			// Visual Colour Comparison
 			p.noStroke();
