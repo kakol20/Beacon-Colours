@@ -293,7 +293,7 @@ function SolveBeacon(target, depth, beamWidth = 256) {
 
 		// Early exit if close enough
 		// https://zschuessler.github.io/DeltaE/learn/
-		if (best.oklabDist * 100 <= (depth <= 10 ? 0. : 0.5)) break;
+		if (best.oklabDist * 100 <= (depth <= 16 ? 0. : 0.5)) break;
 	}
 
 	// One glass of starting colour generated the best path if path array empty
