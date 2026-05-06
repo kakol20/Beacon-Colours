@@ -130,10 +130,12 @@ const sketch = (p) => {
 		let current = Date.now();
 		// console.log('Mouse Pressed', Date.now());
 
-		if (current - mouse.lastPressed <= 500) {
-			++mouse.count;
-		} else {
-			mouse.count = 0;
+		if (p.mouseX >= 0 && p.mouseX < p.width && p.mouseY >= 0 && p.mouseY < p.height) {
+			if (current - mouse.lastPressed <= 500) {
+				++mouse.count;
+			} else {
+				mouse.count = 0;
+			}
 		}
 
 		if (mouse.count >= 2) {
